@@ -1,0 +1,69 @@
+
+
+
+#[danish covid infections]
+#command=curl -s -N "https://datawrapper.dwcdn.net/xVRrb/472/" | fold -s  | grep Denmark | sed s/,/' '/g | awk '{ print $6}' | numfmt --to=si
+#interval=once
+#color=#f0ca0d
+
+# Get the weather half-hourly
+[weather]
+command=curl -Ss 'https://wttr.in?1&T&Q' | cut -c 16- | head -2 | xargs echo
+interval=1800
+color=#A4C2F4
+
+#/proc/meminfo outputs in kB, which is not very usefull if you have 1GB left, 
+#also numfmt only uses a single letter prefix so B for bytes is removed with sed and then formatted to appropriate unit with numfmt
+#[memory-usage]
+#command=cat  /proc/meminfo | grep MemAvail | awk '{print $2 $3 }' | sed s/B/""/ | tr '[:lower:]' '[:upper:]' | numfmt --from=si --to=si
+interval=5
+
+
+#get wifi strenght from wlp3s0 the name used for wireless devices in ubuntu, it's .
+[wifi_strength]
+command=cat /proc/net/wireless | grep wl | awk '{print $3}' | sed s/'\.'/\%/
+interval=5
+color=#91E78B
+
+# Query my default IP address only on startup
+#[ip]
+#command=ip a | grep inet | grep wl | awk '{print $2}'
+#interval=once
+#short_text=test1 t1 
+#background=
+color=#91E78B
+
+#battery
+[battery2]
+command=~/.config/i3blocks/i3blocks-contrib/battery2/battery2
+markup=pango
+interval=30
+#81% bliver ikke farvet i color
+#color=#ffff00
+
+
+# Update time every 5 seconds
+[time]
+command=date +%T
+interval=10
+#background= 
+color=#00ff00
+
+[date]
+command=date +"%a:%d:%m:%y"
+interval=once
+#LABEL=
+#DATEFMT=+%H:%M:%S
+# SHORTFMT=+%H:%M:%S
+#xHEIGHT=180
+#xWIDTH=220
+#yellowlish color
+color=#ffff00
+
+#spacing of 3 chars
+[spacing]
+command=echo "   "
+interval=once
+
+
+

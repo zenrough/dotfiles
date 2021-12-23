@@ -1,0 +1,49 @@
+q
+see 4:54
+see 5:0
+see 5:
+see 5
+seek 
+seek 3
+see 3
+s 
+s 3
+seek 3:02
+man mark
+mark 2
+seek 2:55
+go 2:55
+set show_remaining_time=false
+set show_playback_position=true
+set show_remaining_time
+vol +30
+vol 38
+add pingpong-podcast.mp3
+add ~/Downloads/pin
+clear
+claear
+set altformat_trackwin=%d %F
+set altformat_trackwin=%F %d
+add ~/Music/
+add ~/Music/'
+set altformat_trackwin=%d=%F
+set altformat_trackwin=%F=%d
+set altformat_title=%F=%d
+set altformat_playlist=%F=%d
+set altformat_playlist =%F=%d
+set altformat_current=%F=%d
+set altformat_current %F %d
+help
+save 
+colorscheme gruvbox-alt
+colorscheme amazon
+colorscheme gruvbvbox-light
+colorscheme gruvbox
+colorscheme gruvbox2
+set buffer_second
+wq
+colorscheme
+h colorscheme
+colorscheme night
+colorscheme jellybeans
+colorscheme 1st
