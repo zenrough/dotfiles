@@ -1,0 +1,173 @@
+;; kmonad is hosted at github, it is a keyboard remapper with support for using 
+;; shell commands, "keyd" does not allow you to use shell commands, then how would 
+;; i be able to have portable launcher shortcuts ? and adjusting light in a window 
+;; manager only enviroment ?
+;; startup file is at /etc/systemd/kmonad.service
+;; https://www.freedesktop.org/software/systemd/man/systemd.unit.html#
+;; it %E iS $XDG_HOME_DIR if service is ran by a "user manager", idk maybe set to multiuser.target, does not work, going to learn t
+;; , but the root user is running the service
+;; I am not big brain enough
+;;
+;; for debugging use your script:
+;; kmonad <SCRIPTFILE>  -ldebuge right/portable way instead of just doing a straight pathh
+
+;; keycode names are in this file
+;; <KMONADFILE>/src/KMonad/Keyboard/Keycode.hs
+;;
+;; my laptops is a nordic/danish layout, on my laptop,
+;; fn is not included, as not detected by os
+
+(defcfg
+  input  (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd")
+  output (uinput-sink
+          "My KMonad output")                           ;; name of the created keyboard
+          ;;"sleep 1 && setxkbmap -option compose:rctl" ;; additional, environment-specific, information
+  ;; composekey to grv which is ½, or the key from the "1" key on the numrow
+  ;; cmp-seq rctl
+  ;; cmp-seq-delay 5
+  ;; fallthrough if true then if on a layer where the button is absent, then just pass as a normal button
+  fallthrough true
+  allow-cmd true
+  )
+
+
+(defalias
+
+;; rebinds
+ cesc (tap-next esc ctl) ;; esc when tapped, ctrl when released
+  tm  (tap-next tab lmet) ;; tab when tapped, ctrl when released
+
+
+;; when lmeta( this means the super key) is pressed toggle shortcut layer,
+;; when released toggle shortcut layer off
+;; implement as macro, as we have press 1 where there is a layer shift, then a shift to normal to allow WM to use it
+;; toggle layer for 1 keypress, this is a way to oneshot
+;; but weirdly enough you have to press 2 times for the layer to be able to toggle on 1.st
+ stgl (around-next (layer-toggle launchers)  )
+
+;; layer switching, does not work properly when using tapnext, you have to press 2 times to be able to tap it, so i'll use tap-hold 500
+ win2 (tap-hold 500 @stgl lmet)
+ ;; first hold is tapped in a fcitx virtual math layout
+ sym (tap-macro " e c h o 2 ")
+ ;; spc2 (tap-hold 500 @stgl spc), does not work as reality as you always tap or hold it down.
+ ;; symenable, this whole thing needs to be a button... because else i can't bind it to a
+;; symenable (around-next (layer-toggle symbols) )
+;; sym on altgr or ralt does not work, because altgr is weird
+;;
+ ;; sym (tap-hold 500 @symenable lctl)
+
+;; program launchers or shortcuts
+        ;; switch to auxillery window mangager tag, instead.
+        ;; wb (cmd-button "exec firefox")
+
+        term (cmd-button "$TERM")
+
+        ;; screenlocker
+        lck (cmd-button "exec betterlockscreen -l")
+
+        ;; media things
+         prScrnC (cmd-button "scrot -s -f -o '/tmp/image.png' && xclip -selection clipboard -t 'image/png' -i /tmp/image.png" )
+        ;;cam opens camera appliction
+        cam (cmd-button "obs")
+  prScrnF (cmd-button "scrot -s $HOME/Pictures/screenshots/'date +%Y-%d-%m_%H:%M:%S'.png" )
+;; backlightlight
+lup (cmd-button "light -A 10") ;; back-light down by 10 percent
+ldwn (cmd-button "light -U 10") ;; back-light down by 10 percent
+
+;; pulseaudio, pactl only works on pulseaudio audio systems, @@ indicates delimteres of the variable, I do not know if it is documented, it just works
+  vold (cmd-button "pactl set-sink-volume @DEFAULT_SINK@ -5%" ) ;; defaultsink is defined by pulseaudio
+  volu (cmd-button "pactl set-sink-volume @DEFAULT_SINK@ +5%" )
+  volm (cmd-button "pactl set-sink-mute @DEFAULT_SINK@ toggle" )
+  ;; turn of mic
+ mic (cmd-button "amixer set Mic toggle" )
+
+;; idk i maybe have to run it as a bash-script
+;; mspadof (cmd-button "xinput --set-prop  $(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")" )" Device Enabled" 0
+;; mspadon (cmd-button "xinput --set-prop  $(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")" )" Device Enabled" 1
+;; drun is "desktop run"
+drun (cmd-button "rofi -modi drun -matching fuzzy -show drun")
+;; for using  wayland on linux,
+;;drun (cmd-button "drun")
+;; macros
+        ;; integer for latex documents
+        int (tap-macro \ i n t { } { } )
+;; fixes for stupid shotcut layer, works better than than pressing 2 times in a row to let it work
+;; keys are reserved for the window manager, by making a alias it goes staight to the wm, it fucks up sometimes, but it's only, if you type very fast and hit the keys at almost same time.
+q (around  lmet q )
+f (around  lmet f )
+h (around  lmet h )
+j (around  lmet j )
+k (around  lmet k )
+l (around  lmet l )
+1 (around  lmet 1 )
+2 (around  lmet 2 )
+3 (around  lmet 3 )
+4 (around  lmet 4 )
+5 (around  lmet 5 )
+6 (around  lmet 6 )
+7 (around  lmet 7 )
+8 (around  lmet 8 )
+9 (around  lmet 9 )
+0 (around  lmet 0 )
+#|
+Φ (Φ)
+
+∇ (∇)
+ε (ε)
+φ (φ)
+π (π)
+∫ (∫)
+Σ (Σ)
+|#
+
+;; DEFALIAS BLOCK ENDs
+)
+
+
+;; almost all function keys are not available, so i'm just going to use "<mod> + <FKEY>" instead
+;; as these these keys are not defined the file Keycode.hs XF86RFKill, XF86RWebCam, XF86AudioMicMute,ADDj
+;; my laptop keyboard is weird, when pressing printscreen, it does not emit prnt, it emits sys
+(defsrc
+  KeyMute   vold volu brdn brup
+  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12      sys ins del
+  grv  1    2    3    4    5    6    7    8    9    0    -     =        bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [     ]        ret
+  caps a    s    d    f    g    h    j    k    l    ;    '     \
+  lsft 102d z    x    c    v    b    n    m    ,    .    /              rsft
+  lctl lmet lalt           spc            ralt rctl      lft        up    down rght
+)
+
+(deflayer default
+   @volm @vold @volu @ldwn @lup
+  caps      f1    f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12     @prScrnC ins del
+  grv       1     2    3    4    5    6    7    8    9    0    -     =        bspc
+  @tm       q     w    e    r    t    y    u    i    o    p    [     ]        ret
+  @cesc     a     s    d    f    g    h    j    k    l    ;    '     \
+  lsft      102d  z    x    c    v    b    n    m    ,    .    /              rsft
+  lctl      @win2 lalt      spc            ralt rctl  lft up   down rght
+)
+
+
+;; program launching commands.
+(deflayer launchers
+@volm @vold @volu @ldwn @lup
+  _         @volm @vold @volu @mic  _    _    _   @cam  @lck  _     @ldwn @lup   @prScrnF _  _
+  _         @1    @2    @3     @4   @5   @6   @7   @8   @9    @0    _     _      _
+  _         @q    _     _      _    _    _    _     _   _     _     _     _     @term
+  _         _     _     @drun  @f   _    @h   @j   @k   @l    _     _     _
+  _         _     _     _      _      _    _    _    _    _   _     _     _
+  _         _     _            _                _    _    _   _     _     _
+
+)
+#|
+
+layer for symbol does not work :(, as kmonad only sends asci characters
+There are many ways to get nonascii chars,
+The compose key that only works on X11, so non usable on Windows, or MacOS.
+Or the ibus compose key
+USE IBUS, because it is supported by fedora and is going to have wayland support
+"Intelligent Input Bus is working on Wayland support, it could be ready for Fedora 22" from wikipedia
+
+
+different "input method" i'm going to just switch to greek keyboard inputmethod
+|#

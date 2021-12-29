@@ -1,0 +1,18 @@
+#+TITLE: Awesome Wm Optimizations
+* inspiration
+https://github.com/ChrisTitusTech/titus-awesome
+* Todo
+** DONE "pull tags as default" - "S" "<tag-num>"
+** DONE "run program same as dwm or i3wm" - "S-d"
+** DONE master tiling as default on all but tag 8 and 9
+** DONE "kill with window" - "win" + "q"
+** DONE transparent gaps between windows
+** DONE window rules from dwm files
+** DONE battery widget https://github.com/streetturtle/awesome-wm-widgets
+** TODO workspace names as pictures
+** DONE i3-tabbed layout, but make mod+k(up) to move right, eg. moving up is moving horisontally right, # Ill just live with it
+** TODO  via awesome startup signal: show view all tags at startup,
+** TODO mouse follows focus change by keyboard(EG. if i change focus with keyboard from window 1 then shift focus to window 2, the cursor goes from window 1 to window 2)
+* depends
+lua
+"awesome" the window manager

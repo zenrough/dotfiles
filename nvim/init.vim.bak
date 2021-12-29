@@ -1,0 +1,184 @@
+set title
+set bg=light
+set go=a
+set hlsearch
+set showmode
+set ruler
+set laststatus=0
+set noshowcmd
+set shiftwidth=4
+
+" Some basics:
+	"nnoremap c "_c
+	set nocompatible
+	filetype plugin on
+	syntax on
+	set encoding=utf-8
+" number for lines
+	set number
+	set smartindent
+	set relativenumber 
+" line folding (texwith) to lenght of characters to the same as one line in libreoffice when font size is 12 and the font is liberation serif
+"	set tw=90
+" show which lines are wrapped, prefixes ··
+set showbreak=~~
+" Enable autocompletion:
+	set wildmode=longest,list,full
+" Disables automatic commenting on newline:
+	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+" Perform dot commands over visual blocks:
+	vnoremap . :normal .<CR>
+" Goyo plugin makes text more readable when writing prose:
+	map <leader>f :Goyo \| set bg=light \| set linebreak<CR>
+" Spell-check set to plugin because danish isn't available for spell-check 
+
+" Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
+	set splitbelow splitright
+" IKKE BRUGT vimling plugin by luke smith:
+	"nm <leader><leader>d :call ToggleDeadKeys()<CR>
+	"imap <leader><leader>d <esc>:call ToggleDeadKeys()<CR>a
+	"nm <leader><leader>i :call ToggleIPA()<CR>
+	"imap <leader><leader>i <esc>:call ToggleIPA()<CR>a
+	"nm <leader><leader>q :call ToggleProse()<CR>
+"command lists
+source /home/ma/programmering/vim/unset-things.vim
+"vimwiki 
+"call plug#begin('~/.vim/plugged')
+"Plug 'vimwiki/vimwiki'
+"Plug 'lervag/vimtex'
+" Shortcutting split navigation, saving a keypress:
+	map <C-h> <C-w>h
+	map <C-j> <C-w>j
+	map <C-k> <C-w>k
+	map <C-l> <C-w>l
+
+" Replace ex mode with gq
+	"map Q gq
+"ex mode er til vim-komandoer der kan bruges i som stream processor, ligesom sed
+" Check file in shellcheck:
+" Disables automatic commenting on newline:
+	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+" Perform dot commands over visual blocks:
+	vnoremap . :normal .<CR>
+" Goyo plugin makes text more readable when writing prose:
+	map <leader>f :Goyo \| set bg=light \| set linebreak<CR>
+" Spell-check set to <leader>o, 'o' for 'orthography':
+"map <leader>o :setlocal spell! spelllang=en_us<CR>
+" Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
+	set splitbelow splitright
+" IKKE BRUGT vimling:
+	"nm <leader><leader>d :call ToggleDeadKeys()<CR>
+	"imap <leader><leader>d <esc>:call ToggleDeadKeys()<CR>a
+	"nm <leader><leader>i :call ToggleIPA()<CR>
+	"imap <leader><leader>i <esc>:call ToggleIPA()<CR>a
+	"nm <leader><leader>q :call ToggleProse()<CR>
+
+" Shortcutting split navigation, saving a keypress:
+	map <C-h> <C-w>h
+	map <C-j> <C-w>j
+	map <C-k> <C-w>k
+	map <C-l> <C-w>l
+
+"ex mode er til vim-komandoer der kan bruges i som stream processor, ligesom sed
+" Check file in shellcheck:
+	"map <leader>s :!clear && shellcheck -x %<CR>
+
+" Open my bibliography file in split
+	map <leader>b :vsp<space>$BIB<CR>
+	map <leader>r :vsp<space>$REFER<CR>
+
+" Replace all is aliased to S.
+	nnoremap S :%s//g<Left><Left>
+
+" Compile document, be it groff/LaTeX/markdown/etc.
+	map <leader>c :w! \| !compiler "<c-r>%"<CR>
+
+" Open corresponding .pdf/.html or preview
+	map <leader>p :!opout <c-r>%<CR><CR>
+
+" Search for whole words binding
+nnoremap <leader>/ /\<\><left><left>
+
+
+" Runs a script that cleans out tex build files whenever I close out of a .tex file.
+	autocmd VimLeave *.tex !texclear %
+
+" Ensure files are read as what I want:
+	let g:vimwiki_ext2syntax = {'.Rmd': 'markdown', '.rmd': 'markdown','.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
+	map <leader>v :VimwikiIndex
+	let g:vimwiki_list = [{'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.md'}]
+	autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown
+	autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
+	autocmd BufRead,BufNewFile *.tex set filetype=tex
+
+" Save file as sudo on files that require root permission
+command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
+cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+" VIRKER IKKE Automatically deletes all trailing whitespace and newlines at end of file on save.
+	"autocmd BufWritePre * %s/\s\+$//
+	"autocmd BufWritePre * %s/\n\+\%$//
+	"autocmd BufWritePre *.[ch] %s/\%$/\r/e
+
+"keyremaps
+"switch function of ctrl+f and ctrl+b
+nnoremap <C-f> <C-b>
+nnoremap <C-b> <C-f>
+" custom things i haven't made, 
+" autosaving
+
+
+	autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
+	autocmd BufRead,BufNewFile *.tex set filetype=tex
+	autocmd BufRead,BufNewFile /tmp/calcurse*,~/.calcurse/notes/* set filetype=markdown
+	"autocmd BufWritePre *.[ch] %s/\%$/\r/e
+	"autocmd BufWritePre * %s/\n\+\%$//
+	"autocmd BufWritePre * %s/\s\+$//
+	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+	autocmd VimLeave *.tex !texclear %
+" autosaving
+" Check file in shellcheck:
+cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
+" Compile document, be it groff/LaTeX/markdown/etc.
+" custom things i haven't made, 
+" Disables automatic commenting on newline:
+"ex mode er til vim-komandoer der kan bruges i som stream processor, ligesom sed
+	filetype plugin on
+" Goyo plugin makes text more readable when writing prose:
+" IKKE BRUGT vimling:
+" IKKE BRUGT vimling af luke smith:
+" IKKE BRUGT vimling plugin by luke smith:
+	"imap <leader><leader>d <esc>:call ToggleDeadKeys()<CR>a
+	"imap <leader><leader>i <esc>:call ToggleIPA()<CR>a
+"keyremaps
+	let g:vimwiki_ext2syntax = {'.Rmd': 'markdown', '.rmd': 'markdown','.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
+	let g:vimwiki_list = [{'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.md'}]
+"location of all 
+	map <C-h> <C-w>h
+	map <C-j> <C-w>j
+	map <C-k> <C-w>k
+	map <C-l> <C-w>l
+	map <leader>b :vsp<space>$BIB<CR>
+	map <leader>c :w! \| !compiler "<c-r>%"<CR>
+	map <leader>f :Goyo \| set bg=light \| set linebreak<CR>
+	map <leader>o :setlocal spell! spelllang=en_us<CR>
+	map <leader>p :!opout <c-r>%<CR><CR>
+	map <leader>r :vsp<space>$REFER<CR>
+	"map <leader>s :!clear && shellcheck -x %<CR>
+	map <leader>v :VimwikiIndex
+	"nm <leader><leader>d :call ToggleDeadKeys()<CR>
+	"nm <leader><leader>i :call ToggleIPA()<CR>
+	"nm <leader><leader>q :call ToggleProse()<CR>
+nnoremap <C-b> <C-f>
+	"nnoremap c "_c
+nnoremap <C-f> <C-b>
+	nnoremap S :%s//g<Left><Left>
+set backspace=indent,eol,start  " more powerful backspacing
+set clipboard+=unnamedplus
+set encoding=utf-8
+set laststatus=0
+source /home/ma/programmering/vim/unset-things.vim
+" Spell-check set to <leader>o, 'o' for 'orthography':
+" Spell-check set to plugin because danish isn't available for spell-check 
+" Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
+"switch function of ctrl+f and ctrl+b
