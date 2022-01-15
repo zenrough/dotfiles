@@ -27,11 +27,11 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-gruvbox)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/Documents/")
 
 ;; readno
      (setq org-todo-keywords
@@ -80,13 +80,13 @@
 
                              "~/Documents/organisering/"
                              "~/sg/*"
-                             ))
+                             )
+      )
 
 
 
 ;; runs comman org-odt-convert-processes
-;; use docx format instead of odt, as word says the file is dangerous if in .odt
-;; (setq  org-odt-preferred-output-format docx)
+;; use docx format instead of odt, as microsoft word says the file is dangerous if in .odt
 
 
 ;; use programs as default programs
@@ -97,4 +97,41 @@
 ;; colum size of 80 chars(the same as a terminal window)
 (setq-default fill-column 80)
 
-    
+;; allow dead-acute á and other accenting to work
+(require 'iso-transl)
+
+;; vim visual line go down binding for orgmode as this is the vim way
+;; and if you like having lines soft folded/wrapped then it is for you
+;; (add-hook 'org-mode-hook '(lambda ()
+;; (define-key (current-local-map) [(g-k)] (evil-previous-visual-line) )
+;; (define-key (current-local-map) [(g-j)] (evil-next-visual-line) )
+  ;; ))
+
+;; Okular
+
+(setq TeX-view-program-list '(("Okular" "okular --unique %u")))
+
+(add-hook 'LaTeX-mode-hook '(lambda ()
+                  (add-to-list 'TeX-expand-list
+                       '("%u" Okular-make-url))))
+
+(defun Okular-make-url () (concat
+               "file://"
+               (expand-file-name (funcall file (TeX-output-extension) t)
+                         (file-name-directory (TeX-master-file)))
+               "#src:"
+               (TeX-current-line)
+               (expand-file-name (TeX-master-directory))
+               "./"
+               (TeX-current-file-name-master-relative)))
+
+(setq TeX-view-program-selection '((output-pdf "Okular")))
+
+
+     (add-hook 'org-mode-hook
+               (lambda ()
+                 (define-key evil-normal-state-map (kbd "gk")
+                   'evil-previous-visual-line)
+                 (define-key evil-normal-state-map (kbd "gj")
+                             'evil-next-visual-line)))
+     ;; evil mode uses another table than evil....

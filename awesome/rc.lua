@@ -63,8 +63,8 @@ editor_cmd = terminal .. " -e " .. editor
 beautiful.master_width_factor = 0.6
 
 -- add transparent gaps between all clients, with a value of anything 0.2 if you want ? it's broken
- beautiful.useless_gap = 5
- --
+ beautiful.useless_gap = 3
+
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -545,25 +545,60 @@ awful.rules.rules = {
     },
 
     -- Set Firefox to always map on the tag named "www" on screen 1.
-    { rule = { class = "Firefox" },
+    { rule = {
+        class = "Firefox"
+
+    },
       properties = { screen = 1, tag = "www" }
     },
 
     -- all terminals on 3. tag, "">_" is used because then you can change if oyu wan't it on 3. , or 2. , or 4.. or any tag
-    { rule = { class = ".*terminal.*" },
+    { rule =
+        { class = ".*terminal.*"
+    -- kitty, plus alacritty
+
+        },
       properties = { screen = 1, tag = ">_" }
     },
 
-    { rule = { class = "Zathura" },
+    -- kitty is a wayland and X11 terminal
+    -- light resource usage
+    { rule =
+        { class = "kitty"
+
+        },
+      properties = { screen = 1, tag = ">_" }
+    },
+
+    -- alacritty the fastest terminal,
+    -- but also ressource heavy
+    { rule =
+        { class = "alacritty"
+
+        },
+      properties = { screen = 1, tag = ">_" }
+    },
+
+
+    { rule =
+        { class = "Zathura"
+
+        },
       properties = { screen = 1, tag = "D" }
     },
 
     -- anything office on 8
-    { rule = { class = ".*office.*" },
+    { rule = {
+        class = ".*office.*"
+
+    },
       properties = { screen = 1, tag = "office" }
     },
 
-    { rule = { class = "java-lang-Thread" },
+    { rule = {
+        -- class = "java-lang-Thread"
+        name = ".*Maple.*" ,
+    },
       properties = { screen = 1, tag = "W" }
     },
     -- emacs as editor, smarter to use easy to acces this for things you toggle often, as i toggle windows instead of just viewing one at a time

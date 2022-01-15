@@ -1,7 +1,4 @@
-;; kmonad is hosted at github, it is a keyboard remapper with support for using 
-;; shell commands, "keyd" does not allow you to use shell commands, then how would 
-;; i be able to have portable launcher shortcuts ? and adjusting light in a window 
-;; manager only enviroment ?
+
 ;; startup file is at /etc/systemd/kmonad.service
 ;; https://www.freedesktop.org/software/systemd/man/systemd.unit.html#
 ;; it %E iS $XDG_HOME_DIR if service is ran by a "user manager", idk maybe set to multiuser.target, does not work, going to learn t
@@ -31,6 +28,10 @@
   )
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;
+;;my aliases/shortcuts;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defalias
 
 ;; rebinds
@@ -42,13 +43,17 @@
 ;; when released toggle shortcut layer off
 ;; implement as macro, as we have press 1 where there is a layer shift, then a shift to normal to allow WM to use it
 ;; toggle layer for 1 keypress, this is a way to oneshot
-;; but weirdly enough you have to press 2 times for the layer to be able to toggle on 1.st
+;; but weirdly enough you have to press 2 times for the layer to be able to toggle on 1.st, but it feels slow to wait for 500ms
+ ;; stgl (around-hold 500 (layer-toggle launchers)  )
  stgl (around-next (layer-toggle launchers)  )
 
 ;; layer switching, does not work properly when using tapnext, you have to press 2 times to be able to tap it, so i'll use tap-hold 500
- win2 (tap-hold 500 @stgl lmet)
- ;; first hold is tapped in a fcitx virtual math layout
- sym (tap-macro " e c h o 2 ")
+ win2 (tap-next @stgl lmet)
+
+
+;; paste primary X11 selection with keybord, so does not work on tty/console and probably not wayland
+ Ppst (cmd-button "sh -c 'xsel | xvkbd -xsendevent -file - 2>/dev/null'")
+
  ;; spc2 (tap-hold 500 @stgl spc), does not work as reality as you always tap or hold it down.
  ;; symenable, this whole thing needs to be a button... because else i can't bind it to a
 ;; symenable (around-next (layer-toggle symbols) )
@@ -60,9 +65,12 @@
         ;; switch to auxillery window mangager tag, instead.
         ;; wb (cmd-button "exec firefox")
 
-        term (cmd-button "$TERM")
 
-        ;; screenlocker
+
+        ;; kitty is a terminal program, it is wayland and X11
+        term (cmd-button "kitty")
+
+        ;; screenlocker for X server
         lck (cmd-button "exec betterlockscreen -l")
 
         ;; media things
@@ -74,30 +82,74 @@
 lup (cmd-button "light -A 10") ;; back-light down by 10 percent
 ldwn (cmd-button "light -U 10") ;; back-light down by 10 percent
 
-;; pulseaudio, pactl only works on pulseaudio audio systems, @@ indicates delimteres of the variable, I do not know if it is documented, it just works
+;; pulseaudio, pactl only works on if using pulseaudio as audio server  , @@ indicates delimteres of the variable, I do not know if it is documented, it just works
   vold (cmd-button "pactl set-sink-volume @DEFAULT_SINK@ -5%" ) ;; defaultsink is defined by pulseaudio
   volu (cmd-button "pactl set-sink-volume @DEFAULT_SINK@ +5%" )
   volm (cmd-button "pactl set-sink-mute @DEFAULT_SINK@ toggle" )
   ;; turn of mic
  mic (cmd-button "amixer set Mic toggle" )
 
-;; idk i maybe have to run it as a bash-script
+;; idk i maybe have to run it as a bash-script or if you have hardware keys which my pc has, so i am skipping
 ;; mspadof (cmd-button "xinput --set-prop  $(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")" )" Device Enabled" 0
 ;; mspadon (cmd-button "xinput --set-prop  $(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")" )" Device Enabled" 1
 ;; drun is "desktop run"
 drun (cmd-button "rofi -modi drun -matching fuzzy -show drun")
-;; for using  wayland on linux,
-;;drun (cmd-button "drun")
-;; macros
-        ;; integer for latex documents
+;; for using  wayland on linux, use a wayland compatible program
+;;drun (cmd-button ""
+
+;;;;;;;;;;;
+;; MACROS;;
+;;;;;;;;;;;
+
+ no_gnu ( tap-macro " I   u s e   L i n u x   a s   m y   o p e r a t i n g   s y s t e m ,    I  s t a t e   p r o u d l y   t o   t h e   u n k e m p t ,   b e a r d e d   m a n .   H e   s w i v e l s   a r o u n d   i n   h i s   d e s k   c h a i r   w i t h   a   d e v i l i s h   g l e a m   i n   h i s   e y e s ,   r e a d y   t o   m a n s p l a i n   w i t h   e x t r e m e   p r e c i s i o n .    A c t u a l l y  ,   h e   s a y s   w i t h   a   g r i n ,    L i n u x   i s   j u s t   t h e   k e r n e l .   Y o u   u s e   G N U + L i n u x !    I   d o n  t   m i s s   a   b e a t   a n d   r e p l y   w i t h   a   s m i r k ,    I   u s e   A l p i n e ,   a   d i s t r o   t h a t   d o e s n  t   i n c l u d e   t h e   G N U   C o r e u t i l s ,   o r   a n y   o t h e r   G N U   c o d e .   I t  s   L i n u x ,   b u t   i t  s   n o t   G N U + L i n u x .    T h e   s m i l e   q u i c k l y   d r o p s   f r o m   t h e   m a n  s   f a c e .   H i s   b o d y   b e g i n s   c o n v u l s i n g   a n d   h e   f o a m s   a t   t h e   m o u t h   a n d   d r o p s   t o   t h e   f l o o r   w i t h   a   s i c k l y   t h u d .   A s   h e   w r i t h e s   a r o u n d   h e   s c r e a m s    I - I T   W A S   C O M P I L E D   W I T H   G C C !   T H A T   M E A N S   I T  S   S T I L L   G N U !    C o o l l y ,   I   r e p l y    I f   w i n d o w s   w e r e   c o m p i l e d   w i t h   G C C ,   w o u l d   t h a t   m a k e   i t   G N U ?    I   i n t e r r u p t   h i s   r e s p o n s e   w i t h    - a n d   w o r k   i s   b e i n g   m a d e   o n   t h e   k e r n e l   t o   m a k e   i t   m o r e   c o m p i l e r - a g n o s t i c .   E v e n   i f   y o u   w e r e   c o r r e c t ,   y o u   w o n  t   b e   f o r   l o n g .    W i t h   a   s i c k l y   w h e e z e ,   t h e   l a s t   o f   t h e   m a n  s   l i f e   i s   e j e c t e d   f r o m   h i s   b o d y .   H e   l i e s   o n   t h e   f l o o r ,   c o l d   a n d   l i m p .   I  v e   w o m a n s p l a i n e d   h i m   t o   d e a t h . " )
+;; tip, as the tapmacro function only takes a string as seperated by whitespace,
+;; use in python use the split() function
+;; you could do this with this python program
+;; #!/usr/bin/env python3
+;;  s = "'I use Linux as my operating system,' I state proudly to the unkempt, bearded man. He swivels around in his desk chair with a devilish gleam in his eyes, ready to mansplain with extreme precision. 'Actually', he says with a grin, 'Linux is just the kernel. You use GNU+Linux!' I don't miss a beat and reply with a smirk, 'I use Alpine, a distro that doesn't include the GNU Coreutils, or any other GNU code. It's Linux, but it's not GNU+Linux.' The smile quickly drops from the man's face. His body begins convulsing and he foams at the mouth and drops to the floor with a sickly thud. As he writhes around he screams 'I-IT WAS COMPILED WITH GCC! THAT MEANS IT'S STILL GNU!' Coolly, I reply 'If windows were compiled with GCC, would that make it GNU?' I interrupt his response with '-and work is being made on the kernel to make it more compiler-agnostic. Even if you were correct, you won't be for long.' With a sickly wheeze, the last of the man's life is ejected from his body. He lies on the floor, cold and limp. I've womansplained him to death."
+;;  def split(s):
+;;      return [char for char in s]
+;;  s_splitted = split(s)
+;;  # we need to remove [] and ' as split returns <s> as a list/array,
+;;  # we can't use replace as replace is for a string, this is a list of strings
+;;  # join() takes the list/array and converts it to a string, the ' ' is saying to insert a whitespace between each interval/entry
+;;  kmonad_string = ' '.join(s_splitted)
+;;  print(kmonad_string)
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; macros for latex;;
+;;;;;;;;;;;;;;;;;;;;;
+
+        ;; int is intergral for latex documents
         int (tap-macro \ i n t { } { } )
-;; fixes for stupid shotcut layer, works better than than pressing 2 times in a row to let it work
-;; keys are reserved for the window manager, by making a alias it goes staight to the wm, it fucks up sometimes, but it's only, if you type very fast and hit the keys at almost same time.
+        alp (tap-macro \ a l p h a)
+        spr (tap-macro \ s i g m a )
+        ;; frac is a fractal or frational strait
+        frac (tap-macro \ f r a c { } { })
+        nbl (tap-macro \ n a b l a)
+        sum (tap-macro \ s u m _ { } ^ { } )
+
+        ;; phi (tap-macro \ p h i)
+        ;; pi (tap-macro \ p i)
+        dt (tap-macro \ d e l t a )
+
+
+
+
+;; keys are reserved for the window manager,
+;;by making a alias, the key goes to that alias instead of the pressed key without modifier, it fucks up sometimes if you don't use tap-next and use tap-hold instead, but it's only, if you type very fast and hit the keys at almost same time,
+;; to not use tap-hold as it reads the keyboard input for the duration then spits out the output.
+;; kill application
 q (around  lmet q )
+;; full screen
 f (around  lmet f )
+;; move windows with vim movement keys
 h (around  lmet h )
 j (around  lmet j )
 k (around  lmet k )
+l (around  lmet l )
+;; change workspace
 l (around  lmet l )
 1 (around  lmet 1 )
 2 (around  lmet 2 )
@@ -109,6 +161,7 @@ l (around  lmet l )
 8 (around  lmet 8 )
 9 (around  lmet 9 )
 0 (around  lmet 0 )
+;; "o" is for changing screens in awesomewm
 #|
 Φ (Φ)
 
@@ -153,14 +206,24 @@ l (around  lmet l )
 @volm @vold @volu @ldwn @lup
   _         @volm @vold @volu @mic  _    _    _   @cam  @lck  _     @ldwn @lup   @prScrnF _  _
   _         @1    @2    @3     @4   @5   @6   @7   @8   @9    @0    _     _      _
-  _         @q    _     _      _    _    _    _     _   _     _     _     _     @term
+  _         @q    _     _      _    _    _    _     _   _     @Ppst     _     _     @term
   _         _     _     @drun  @f   _    @h   @j   @k   @l    _     _     _
   _         _     _     _      _      _    _    _    _    _   _     _     _
   _         _     _            _                _    _    _   _     _     _
 
 )
-#|
 
+(deflayer symbols
+@volm @vold @volu @ldwn @lup
+  _         @volm @vold @volu @mic  _    _    _   @cam  @lck  _     @ldwn @lup   @prScrnF _  _
+  _         @1    @2    @3     @4   @5   @6   @7   @8   @9    @0    _     _      _
+  _         @q    _     _      _    _    _    _     _   _     @Ppst     _     _     @term
+  _         _     _     @dlta  @f   _    @h   @j   @k   @l    _     _     _
+  _         _     _     _      _      _    _    _    _    _   _     _     _
+  _         _     _            _                _    _    _   _     _     _
+
+)
+#|
 layer for symbol does not work :(, as kmonad only sends asci characters
 There are many ways to get nonascii chars,
 The compose key that only works on X11, so non usable on Windows, or MacOS.
@@ -169,5 +232,5 @@ USE IBUS, because it is supported by fedora and is going to have wayland support
 "Intelligent Input Bus is working on Wayland support, it could be ready for Fedora 22" from wikipedia
 
 
-different "input method" i'm going to just switch to greek keyboard inputmethod
+different "input method" i'm going to just switch to greek keyboard as inputmethod
 |#

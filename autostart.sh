@@ -2,6 +2,9 @@
 
 # only start process if it's not already running
 
+# this is a bashism, so it won't work on dash/sh,
+# "pgrep" gives the PID of a  process, -f means list name instead of PID
+#
 function run {
   if  ! pgrep -f $1 ;
   then
@@ -11,9 +14,9 @@ function run {
 
 # enviroment varialbes
 # let gtk and qt handle fcitx compose key. else it breaks
-export XMODIFIERS=@im=fcitx
-export GTK_IM_MODULE="fcitx"
-export QT_IM_MODULE="fcitx"
+export XMODIFIERS=@im="ibus"
+export GTK_IM_MODULE="ibus"
+export QT_IM_MODULE="ibus"
 
 #get id  number for touchpad
 ID=$(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")
@@ -66,4 +69,5 @@ run thunar --daemon
 run emacs --daemon 
 
 
-# kmonad ~/.config/kmonad/config.kbd
+kmonad ~/.config/kmonad/config.kbd &
+

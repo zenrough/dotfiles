@@ -11,7 +11,7 @@ endif
 
 call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
 " Use release branch (recommend)
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vimwiki/vimwiki'
 Plug 'junegunn/goyo.vim'
 Plug 'morhetz/gruvbox'
@@ -23,7 +23,18 @@ Plug 'luochen1990/rainbow'
 Plug 'tpope/vim-fugitive'
 " script to toggle comments like "C-x C-;" in emacs
 Plug 'preservim/nerdcommenter'
+" https://github.com/tpope/vim-surround
+Plug 'tpope/vim-surround'
+" fuzzy finder for finding files
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+" most vim completion engines work like shit or have too high version requirements for linux distros based of ubuntu, i'm going to emacs where it is uniform and works...
+" snippet engine, seems superior to snipmate
+" Plug 'SirVer/ultisnips'
+"premade snippets, so i don't have to write them
+"Plug 'honza/vim-snippets'
 call plug#end()
+
 
 "'tpope/vim-fugitive', { 'on': [] }
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
