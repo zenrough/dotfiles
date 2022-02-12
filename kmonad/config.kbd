@@ -89,7 +89,7 @@
          prScrnC (cmd-button "scrot -s -f -o '/tmp/image.png' && xclip -selection clipboard -t 'image/png' -i /tmp/image.png" )
         ;;cam opens camera recording appliction
         cam (cmd-button "obs")
-        ;; a button for saving screenshot as picture file on $HOME/Pictures/screenshots/
+        ;; a butt@win2ln for saving screenshot as picture file on $HOME/Pictures/screenshots/
   prScrnF (cmd-button "scrot -s $HOME/Pictures/screenshots/'date +%Y-%d-%m_%H:%M:%S'.png" )
 ;; backlightlight
 lup (cmd-button "light -A 10") ;; back-light down by 10 percent
@@ -210,7 +210,7 @@ l (around  lmet l )
   caps      f1    f2   f3   f4   f5   f6   f7   f8   f9   f10  f11   f12     @prScrnC ins del
   grv       1     2    3    4    5    6    7    8    9    0    -     =        bspc
   @tm       q     w    e    r    t    y    u    i    o    p    [     ]        ret
-  @cesc     a     s    d    f    g    h    j    k    l    ;    '     \
+  @cesc     a     s    d    f    g    _    _    _    _    ;    '     \
   lsft      102d  z    x    c    v    b    n    m    ,    .    /              rsft
   lctl      @win2l lalt      spc            @ralt2vi rctl  lft up   down rght
 )
@@ -222,21 +222,21 @@ l (around  lmet l )
   @po       @volm @vold @volu @mic  _    _    _   @cam  @lck  _     @ldwn @lup   @prScrnF _  _
   _         @1    @2    @3     @4   @5   @6   @7   @8   @9    @0    _     _      _
   _         @q    _     _      _    _    _    _     _   _     @Ppst     _     _     @term
-  _         _     @kbd  @drun  @f   @no_gnu    @h   @j   @k   @l    _     _     _
+  _         _     @kbd  @drun  @f   @no_gnu    _   _   _    _     _     _     _
   _         _     _     _      _      _    _    _    _    _   _     _     _
   _         _     _            _                _    _    _   _     _     _
 
 )
-
-;; vi layer is not working or done
+;; vi layer is not working or done, b is pgup f is pagedown, 4 is end, 0 and 6 is home
+;; it has to take priority over standard layer but it does not, it returns
 (deflayer vi
-  _         _    _   _
-  _         _    _   _     _   _    _    _   _  _  _     _ _   _ _  _
-  _         _    _   _     _   _    _    _   _  _    _    _     _      _
-  _         _    _   _     _   _    _    _   _  _     _     _     _     _
-  _         _    _   _     _   _    _   up down rght lft  _    _     _
-  _         _    _   _     _   _    _    _   _  _   _     _     _
-  _         _    _            _                _    _    _   _     _     _
+  _         _    _   _     _
+  _         _    _   _     _   _    _    _   _  _  _  _     _  _ _  _
+  _         _    _   _     _   _    _    _   _  _  _  _     _  _
+  _         _    _   _     _   _    _    _   _  _  _  _     _  _
+  _         _    _   _     _   lft    up  down   rght _ _  _ _
+  _         _    _   _     _   _    _    _   _  _   _ _        _
+  _         @win2l   _            _             _   _ _     _     _     _
 
 )
 ;; (deflayer empty
