@@ -23,7 +23,11 @@ local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
 
 -- battery widget battery widget https://github.com/streetturtle/awesome-wm-widgets
-local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
+-- local batteryarc_widget = require("awesome-wm-widgets.batteryarc-widget.batteryarc")
+local battery_widget = require("awesome-wm-widgets.battery-widget.battery")
+
+-- volume widget
+local volume_widget = require('awesome-wm-widgets.volume-widget.volume')
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -60,10 +64,12 @@ editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
 
 -- set master size bigger than equal
-beautiful.master_width_factor = 0.6
+beautiful.master_width_factor = 0.57
 
 -- add transparent gaps between all clients, with a value of anything 0.2 if you want ? it's broken
- beautiful.useless_gap = 3
+-- gaps are usefull, if you to visually seperate windows,
+-- and if using mouse you can move the mouse outside the window and scroll to change workspace.
+ beautiful.useless_gap = 1
 
 
 -- Default modkey.
@@ -243,11 +249,21 @@ awful.tag(names, s, layouts)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
+
+        -- i like the arc one more aestethicly but it's not very practical, (this plugin external, not built into awesomwm)
+        -- volume_widget{
+        --     widget_type = 'arc'
+        -- },
+         volume_widget(),
             mykeyboardlayout,
-            batteryarc_widget({
+
+            -- batteryarc_widget({
+            --     show_current_level = true,
+            --     arc_thickness = 2, }),
+            -- normal battery, you need the awesomwwm widgets collection for arc and normal
+            battery_widget({
                 show_current_level = true,
-                arc_thickness = 2,
-            }),
+                 }),
             wibox.widget.systray(),
             mytextclock,
             s.mylayoutbox,
@@ -426,8 +442,8 @@ clientkeys = gears.table.join(
 for i = 1, 9 do
     globalkeys = gears.table.join(globalkeys,
         -- View tag only.
-        -- awful.key({ modkey }, "#" .. i + 9,
-        awful.key({ modkey, "Control" }, "#" .. i + 9,
+        awful.key({ modkey }, "#" .. i + 9,
+        -- awful.key({ modkey, "Control" }, "#" .. i + 9,
                   function ()
                         local screen = awful.screen.focused()
                         local tag = screen.tags[i]
@@ -437,8 +453,8 @@ for i = 1, 9 do
                   end,
                   {description = "view tag #"..i, group = "tag"}),
         -- Toggle tag display.
-        -- awful.key({ modkey, "Control" }, "#" .. i + 9,
-        awful.key({ modkey, }, "#" .. i + 9,
+        awful.key({ modkey, "Control" }, "#" .. i + 9,
+        -- awful.key({ modkey, }, "#" .. i + 9,
                   function ()
                       local screen = awful.screen.focused()
                       local tag = screen.tags[i]
@@ -596,8 +612,8 @@ awful.rules.rules = {
     },
 
     { rule = {
-        -- class = "java-lang-Thread"
-        name = ".*Maple.*" ,
+       class = "java-lang-Thread"
+        -- name = ".*Maple.*" ,
     },
       properties = { screen = 1, tag = "W" }
     },
