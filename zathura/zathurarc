@@ -77,5 +77,5 @@ set window-title-home-tilde
 # Startup options
 #
 set adjust-open width
-# if true use black background
-set recolor true
+# if true use black colorscheme by default
+# set recolor true
