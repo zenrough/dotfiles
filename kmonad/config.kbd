@@ -47,7 +47,8 @@
  ;; stgl (around-hold 500 (layer-toggle launchers)  )
  ;; stgl is "s=switch" "t=to" "g= proGram" "l=layer"
  stgl (around-next (layer-toggle launchers)  )
- stvl (layer-toggle vi  )
+ ;; I can't get the toggle vi layer on tap to work, would like a fixing suggestion
+ stvl (around-next (layer-toggle vi )  )
 
 ;; layer switching, does not work how i want: when using tapnext, you have to press 2 times to be able to hold it, so use tap-hold 500 if you want to hold down it
  win2l (tap-next @stgl lmet)
@@ -83,44 +84,49 @@
 
         ;; screenlocker for X server
         lck (cmd-button "exec betterlockscreen -l")
-
-        ;; media things
+;; media things
         ;; screenshooter for X11, might add wayland compatible command, look on archwiki
          prScrnC (cmd-button "scrot -s -f -o '/tmp/image.png' && xclip -selection clipboard -t 'image/png' -i /tmp/image.png" )
         ;;cam opens camera recording appliction
         cam (cmd-button "obs")
         ;; a butt@win2ln for saving screenshot as picture file on $HOME/Pictures/screenshots/
-  prScrnF (cmd-button "scrot -s $HOME/Pictures/screenshots/'date +%Y-%d-%m_%H:%M:%S'.png" )
-;; backlightlight
-lup (cmd-button "light -A 10") ;; back-light down by 10 percent
-ldwn (cmd-button "light -U 10") ;; back-light down by 10 percent
+        prScrnF (cmd-button "scrot -s $HOME/Pictures/screenshots/'date +%Y-%d-%m_%H:%M:%S'.png" )
+        ;; backlightlight
+                lup (cmd-button "light -A 10") ;; back-light down by 10 percent
+                ldwn (cmd-button "light -U 10") ;; back-light down by 10 percent
 
-;; pulseaudio, pactl only works on if using pulseaudio as audio server  , @@ indicates delimteres of the variable, I do not know if it is documented, it just works
-  vold (cmd-button "pactl set-sink-volume @DEFAULT_SINK@ -5%" ) ;; defaultsink is defined by pulseaudio
-  volu (cmd-button "pactl set-sink-volume @DEFAULT_SINK@ +5%" )
-  volm (cmd-button "pactl set-sink-mute @DEFAULT_SINK@ toggle" )
-  ;; turn of mic
- mic (cmd-button "amixer set Mic toggle" )
+        ;; pulseaudio, pactl only works on if using pulseaudio as audio server  , @@ indicates delimteres of the variable, I do not know if it is documented, it just works
+        vold (cmd-button "pactl set-sink-volume @DEFAULT_SINK@ -5%" ) ;; defaultsink is defined by pulseaudio
+        volu (cmd-button "pactl set-sink-volume @DEFAULT_SINK@ +5%" )
+        volm (cmd-button "pactl set-sink-mute @DEFAULT_SINK@ toggle" )
+        ;; turn of mic
+        mic (cmd-button "amixer set Mic toggle" )
 
 ;; idk i maybe have to run it as a bash-script or if you have hardware keys which my pc has, so i am skipping
 ;; mspadof (cmd-button "xinput --set-prop  $(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")" )" Device Enabled" 0
 ;; mspadon (cmd-button "xinput --set-prop  $(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")" )" Device Enabled" 1
+ 
 ;; drun is "desktop run"
-;; try to run wayland runner first if fails (the ||) then run rofi
-drun (cmd-button "wofi || rofi -modi drun -matching fuzzy -show drun")
+;; try to run wayland runner first if fails (the <||> ) then run rofi
+drun (cmd-button "wofi --show drun || rofi -modi drun -matching fuzzy -show drun")
 ;; for using  wayland on linux, use a wayland compatible program
 ;;drun (cmd-button ""
 
 ;;;;;;;;;;;
 ;; MACROS;;
 ;;;;;;;;;;;
-no_gnu ( tap-macro  I   u s e   L i n u x   a s   m y   o p e r a t i n g   s y s t e m ,    I  s t a t e   p r o u d l y   t o   t h e   u n k e m p t ,   b e a r d e d   m a n .   H e   s w i v e l s   a r o u n d   i n   h i s   d e s k   c h a i r   w i t h   a   d e v i l i s h   g l e a m   i n   h i s   e y e s ,   r e a d y   t o   m a n s p l a i n   w i t h   e x t r e m e   p r e c i s i o n .    A c t u a l l y  ,   h e   s a y s   w i t h   a   g r i n ,    L i n u x   i s   j u s t   t h e   k e r n e l .   Y o u   u s e   G N U + L i n u x !    I   d o n  t   m i s s   a   b e a t   a n d   r e p l y   w i t h   a   s m i r k ,    I   u s e   A l p i n e ,   a   d i s t r o   t h a t   d o e s n  t   i n c l u d e   t h e   G N U   C o r e u t i l s ,   o r   a n y   o t h e r   G N U   c o d e .   I t  s   L i n u x ,   b u t   i t  s   n o t   G N U + L i n u x .    T h e   s m i l e   q u i c k l y   d r o p s   f r o m   t h e   m a n  s   f a c e .   H i s   b o d y   b e g i n s   c o n v u l s i n g   a n d   h e   f o a m s   a t   t h e   m o u t h   a n d   d r o p s   t o   t h e   f l o o r   w i t h   a   s i c k l y   t h u d .   A s   h e   w r i t h e s   a r o u n d   h e   s c r e a m s    I - I T   W A S   C O M P I L E D   W I T H   G C C !   T H A T   M E A N S   I T  S   S T I L L   G N U !    C o o l l y ,   I   r e p l y    I f   w i n d o w s   w e r e   c o m p i l e d   w i t h   G C C ,   w o u l d   t h a t   m a k e   i t   G N U ?    I   i n t e r r u p t   h i s   r e s p o n s e   w i t h    - a n d   w o r k   i s   b e i n g   m a d e   o n   t h e   k e r n e l   t o   m a k e   i t   m o r e   c o m p i l e r - a g n o s t i c .   E v e n   i f   y o u   w e r e   c o r r e c t ,   y o u   w o n  t   b e   f o r   l o n g .    W i t h   a   s i c k l y   w h e e z e ,   t h e   l a s t   o f   t h e   m a n  s   l i f e   i s   e j e c t e d   f r o m   h i s   b o d y .   H e   l i e s   o n   t h e   f l o o r ,   c o l d   a n d   l i m p .   I  v e   w o m a n s p l a i n e d   h i m   t o   d e a t h .  )
+;; the tap-macro does not allow "_" then it pops <kmonad: Encountered 'Transparent' ouside of top-level layer>
+ no_gnu (tap-macro  ' I  u s e  L i n u x  a s  m y  o p e r a t i n g  s y s t e m , '  I  s t a t e  p r o u d l y  t o  t h e  u n k e m p t ,  b e a r d e d  m a n .  H e  s w i v e l s  a r o u n d  i n  h i s  d e s k  c h a i r  w i t h  a  d e v i l i s h  g l e a m  i n  h i s  e y e s ,  r e a d y  t o  m a n s p l a i n  w i t h  e x t r e m e  p r e c i s i o n .  ' A c t u a l l y ' ,  h e  s a y s  w i t h  a  g r i n ,  ' L i n u x  i s  j u s t  t h e  k e r n e l .  Y o u  u s e  G N U + L i n u x ! '  I  d o n ' t  m i s s  a  b e a t  a n d  r e p l y  w i t h  a  s m i r k ,  ' I  u s e  A l p i n e ,  a  d i s t r o  t h a t  d o e s n ' t  i n c l u d e  t h e  G N U  C o r e u t i l s ,  o r  a n y  o t h e r  G N U  c o d e .  I t ' s  L i n u x ,  b u t  i t ' s  n o t  G N U + L i n u x . '  T h e  s m i l e  q u i c k l y  d r o p s  f r o m  t h e  m a n ' s  f a c e .  H i s  b o d y  b e g i n s  c o n v u l s i n g  a n d  h e  f o a m s  a t  t h e  m o u t h  a n d  d r o p s  t o  t h e  f l o o r  w i t h  a  s i c k l y  t h u d .  A s  h e  w r i t h e s  a r o u n d  h e  s c r e a m s  ' I - I T  W A S  C O M P I L E D  W I T H  G C C !  T H A T  M E A N S  I T ' S  S T I L L  G N U ! '  C o o l l y ,  I  r e p l y  ' I f  w i n d o w s  w e r e  c o m p i l e d  w i t h  G C C ,  w o u l d  t h a t  m a k e  i t  G N U ? '  I  i n t e r r u p t  h i s  r e s p o n s e  w i t h  ' - a n d  w o r k  i s  b e i n g  m a d e  o n  t h e  k e r n e l  t o  m a k e  i t  m o r e  c o m p i l e r - a g n o s t i c .  E v e n  i f  y o u  w e r e  c o r r e c t ,  y o u  w o n ' t  b e  f o r  l o n g . '  W i t h  a  s i c k l y  w h e e z e ,  t h e  l a s t  o f  t h e  m a n ' s  l i f e  i s  e j e c t e d  f r o m  h i s  b o d y .  H e  l i e s  o n  t h e  f l o o r ,  c o l d  a n d  l i m p .  I ' v e  w o m a n s p l a i n e d  h i m  t o  d e a t h . )
 ;; tip, as the tapmacro function only takes a string as seperated by whitespace,
 ;; in python use the split() function
 ;; you could do this with this python program
 
 ;; #!/usr/bin/env python3
 ;;  s = "'I use Linux as my operating system,' I state proudly to the unkempt, bearded man. He swivels around in his desk chair with a devilish gleam in his eyes, ready to mansplain with extreme precision. 'Actually', he says with a grin, 'Linux is just the kernel. You use GNU+Linux!' I don't miss a beat and reply with a smirk, 'I use Alpine, a distro that doesn't include the GNU Coreutils, or any other GNU code. It's Linux, but it's not GNU+Linux.' The smile quickly drops from the man's face. His body begins convulsing and he foams at the mouth and drops to the floor with a sickly thud. As he writhes around he screams 'I-IT WAS COMPILED WITH GCC! THAT MEANS IT'S STILL GNU!' Coolly, I reply 'If windows were compiled with GCC, would that make it GNU?' I interrupt his response with '-and work is being made on the kernel to make it more compiler-agnostic. Even if you were correct, you won't be for long.' With a sickly wheeze, the last of the man's life is ejected from his body. He lies on the floor, cold and limp. I've womansplained him to death."
+;;  # replace whitespace with "_" as that is the kmonad represenation of whitespace, but _ is not allowed in macros, so you can only have a single word......
+;; mystring.replace(" ", "_")
+
+
 ;;  def split(s):
 ;;      return [char for char in s]
 ;;  s_splitted = split(s)
@@ -217,6 +223,11 @@ l (around  lmet l )
 
 
 ;; program launching commands.
+        ;;;;small comment begin ;;;;;
+        ;; the reason for having f keys as media keys is to avoid weird keyboards
+        ;; my razer huntsman v2 has 2 virtual keyboards, one for media keys another for normal keys,
+        ;; nice hack around, razer, but f(eg. f11, f12, f1 ) will always be available
+        ;;;;small comment end ;;;;;
 (deflayer launchers
 @volm @vold @volu @ldwn @lup
   @po       @volm @vold @volu @mic  _    _    _   @cam  @lck  _     @ldwn @lup   @prScrnF _  _
@@ -232,13 +243,20 @@ l (around  lmet l )
 (deflayer vi
   _         _    _   _     _
   _         _    _   _     _   _    _    _   _  _  _  _     _  _ _  _
-  _         _    _   _     _   _    _    _   _  _  _  _     _  _
-  _         _    _   _     _   _    _    _   _  _  _  _     _  _
-  _         _    _   _     _   lft    up  down   rght _ _  _ _
+  _         _    _   _     end   _    home    _   _  _  end  _     _  _
+  _         _    _   _   ins    _    _  pgup    _ _  _     _  _
+  _         _    _   _    pgdn  _   _    lft  down   up  rght _  _ _
   _         _    _   _     _   _    _    _   _  _   _ _        _
   _         @win2l   _            _             _   _ _     _     _     _
 
 )
+;; this is standard bindings mosly,
+;; pgdn is not a half page down, it's a full instead
+;; ins is normally bound to Ctrl+r, it is just without modifier instead.
+
+
+
+
 ;; (deflayer empty
 ;;   _         _    _ _ _
 ;;   _         _    _   _     _   _    _    _   _  _  _     _ _   _ _  _
