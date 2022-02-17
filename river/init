@@ -1,0 +1,222 @@
+
+#!/bin/env bash
+
+# programs non-standard programs leon plikat uses in this config
+# wlopm (plikat's own power managment program for wayland)
+# gnome-desktop (that's how gsettings is included)
+# kanshi is a program for manipulating screen outputs depending on hotplug, # https://sr.ht/~emersion/kanshi
+# mako is a wayland notification daemon, https://wayland.emersion.fr/mako/
+# light is a utility is adjust screen backlight brightness
+#
+# more cool utilities
+# https://wayland.emersion.fr/
+#
+#slurp or grim are both wayland screenshooters
+
+#
+# set modkey
+# mod3 is alt
+# mod4 is super/meta/windows key whatever you want
+set MOD mod4
+
+logger "Starting river."
+# https://git.sr.ht/~leon_plickat/river-config/tree/master/item/river/init
+
+##############
+# Appearance #
+##############
+# maybe just use swaybg ?
+#[[ -e ~/.config/wall.jpg ]] && riverctl spawn "swaybg -m fill -i ~/.config/wall.jpg"
+riverctl background-color       0x777777
+riverctl border-color-unfocused 0x9EEEEE
+riverctl border-color-focused   0x55AAAA
+riverctl border-width 3
+riverctl xcursor-theme tarazed
+gsettings set org.gnome.desktop.interface gtk-theme Adwaita
+gsettings set org.gnome.desktop.interface icon-theme Breeze
+gsettings set org.gnome.desktop.wm.preferences button-layout " "
+gsettings set org.gnome.desktop.interface cursor-theme tarazed
+
+
+##########
+# Inputs #
+##########
+riverctl input "1149:4128:Kensington_Expert_Mouse" accel-profile none
+riverctl input "1149:4128:Kensington_Expert_Mouse" pointer-accel 0.6
+riverctl input "1149:4128:Kensington_Expert_Mouse" scroll-method button
+riverctl input "1149:4128:Kensington_Expert_Mouse" scroll-button BTN_SIDE
+riverctl input "2:10:TPPS/2_IBM_TrackPoint" accel-profile none
+riverctl input "2:10:TPPS/2_IBM_TrackPoint" pointer-accel 0.2
+riverctl set-repeat 40 300
+
+
+###########
+# Interop #
+###########
+gsettings set org.gnome.desktop.default-applications.terminal exec foot.desktop
+riverctl spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river"
+riverctl spawn "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river"
+riverctl spawn /lib/xdg-desktop-portal
+riverctl spawn /lib/xdg-desktop-portal-gtk
+riverctl spawn /lib/xdg-desktop-portal-wlr
+
+
+###########
+# Widgets #
+###########
+riverctl spawn mako
+riverctl map normal $MOD Escape spawn "makoctl dismiss"
+riverctl spawn river-tag-overlay
+riverctl spawn kanshi
+
+
+####################
+# Launchy Keybinds #
+####################
+riverctl map normal $MOD       N spawn "foot"
+riverctl map normal $MOD+Shift N spawn "foot --app-id popup"
+riverctl map normal $MOD       D spawn "foot --app-id launcher /home/leon/.config/river/launch.sh"
+riverctl map normal $MOD       B spawn "foot --app-id launcher /home/leon/.config/river/book.sh"
+riverctl map normal $MOD       O spawn "foot --app-id launcher /home/leon/.config/river/online.sh"
+riverctl map normal $MOD       Print spawn "grim"
+
+
+#####################
+# Window management #
+#####################
+riverctl map normal $MOD+Shift        Q      close
+riverctl map normal $MOD              Return zoom
+riverctl map normal $MOD              F      toggle-fullscreen
+riverctl map normal $MOD              Space  toggle-float
+riverctl map normal $MOD              J      focus-view next
+riverctl map normal $MOD              K      focus-view previous
+riverctl map normal $MOD+Shift        J      swap next
+riverctl map normal $MOD+Shift        K      swap previous
+riverctl map normal $MOD+Mod1         H      move left 100
+riverctl map normal $MOD+Mod1         J      move down 100
+riverctl map normal $MOD+Mod1         K      move up 100
+riverctl map normal $MOD+Mod1         L      move right 100
+riverctl map normal $MOD+Mod1+Control H      snap left
+riverctl map normal $MOD+Mod1+Control J      snap down
+riverctl map normal $MOD+Mod1+Control K      snap up
+riverctl map normal $MOD+Mod1+Control L      snap right
+riverctl map normal $MOD+Mod1+Shift   H      resize horizontal -100
+riverctl map normal $MOD+Mod1+Shift   J      resize vertical 100
+riverctl map normal $MOD+Mod1+Shift   K      resize vertical -100
+riverctl map normal $MOD+Mod1+Shift   L      resize horizontal 100
+riverctl map normal $MOD              Backspace focus-output next
+riverctl map normal $MOD+Shift        Backspace send-to-output next
+riverctl set-cursor-warp on-output-change
+
+
+##########
+# Layout #
+##########
+riverctl spawn "stacktile --per-tag-config --drop-empty-configs"
+riverctl default-layout stacktile
+riverctl map normal $MOD       H     send-layout-cmd stacktile "primary_ratio -0.05"
+riverctl map normal $MOD       L     send-layout-cmd stacktile "primary_ratio +0.05"
+riverctl map normal $MOD+Shift H     send-layout-cmd stacktile "primary_count  +1"
+riverctl map normal $MOD+Shift L     send-layout-cmd stacktile "primary_count  -1"
+riverctl map normal $MOD       Minus send-layout-cmd stacktile "all_padding -10"
+riverctl map normal $MOD       Plus  send-layout-cmd stacktile "all_padding +10"
+riverctl map normal $MOD       Up    send-layout-cmd stacktile "primary_position top"
+riverctl map normal $MOD       Right send-layout-cmd stacktile "primary_position right"
+riverctl map normal $MOD       Down  send-layout-cmd stacktile "primary_position bottom"
+riverctl map normal $MOD       Left  send-layout-cmd stacktile "primary_position left"
+riverctl map normal $MOD+Shift Up    send-layout-cmd stacktile "primary_sublayout rows"
+riverctl map normal $MOD+Shift Right send-layout-cmd stacktile "primary_sublayout stack"
+riverctl map normal $MOD+Shift Down  send-layout-cmd stacktile "primary_sublayout dwindle"
+riverctl map normal $MOD+Shift Left  send-layout-cmd stacktile "primary_sublayout grid"
+for i in $(seq 1 9)
+do
+    riverctl map normal $MOD+Mod1 $i send-layout-cmd stacktile "primary_count $i"
+done
+
+
+########
+# Tags #
+########
+for i in $(seq 1 9)
+do
+    tagmask=$((1 << ($i - 1)))
+    riverctl map normal $MOD               $i set-focused-tags    $tagmask
+    riverctl map normal $MOD+Shift         $i set-view-tags       $tagmask
+    riverctl map normal $MOD+Control       $i toggle-focused-tags $tagmask
+    riverctl map normal $MOD+Shift+Control $i toggle-view-tags    $tagmask
+
+    tagmask=$((1 << (($i - 1) + 9)))
+    riverctl map normal $MOD               F$i set-focused-tags    $tagmask
+    riverctl map normal $MOD+Shift         F$i set-view-tags       $tagmask
+    riverctl map normal $MOD+Control       F$i toggle-focused-tags $tagmask
+    riverctl map normal $MOD+Shift+Control F$i toggle-view-tags    $tagmask
+
+    #)) <- needed to make kakounes syntax highlighting work, for whatever unholy reason
+done
+all_tags_mask=$(((1 << 32) - 1))
+riverctl map normal $MOD       0 set-focused-tags $all_tags_mask
+riverctl map normal $MOD+Shift 0 set-view-tags    $all_tags_mask
+riverctl map normal $MOD       Tab focus-previous-tags
+
+
+
+##############
+# Media Keys #
+##############
+for mode in normal locked
+do
+    case "$(hostname)" in
+        "m5")
+            # This laptop does not automatically turn the screen off when the
+            # lid is closed (maybe the switch  broke or libreboot simply does
+            # not support it), so I need to do it manually.
+            riverctl map $mode None XF86Launch1 spawn "wlopm --toggle LVDS-1"
+
+            # The BIOS tries to be helpful and handles the brightness keys
+            # itself on this laptop while for whatever reason still sending the
+            # keycodes. So I can't bind them here otherwise BIOS ans OS will
+            # get in each others way trying to set the brightness. Sucks,
+            # because when the BIOS sets the brightness it randomly resets in
+            # response to certain events, such as toggling the monitor.
+            # TODO: re-flash libreboot and try to turn this off
+            ;;
+
+        *)
+            riverctl map $mode None XF86MonBrightnessUp   spawn "light -A 5"
+            riverctl map $mode None XF86MonBrightnessDown spawn "light -U 5"
+            ;;
+    esac
+
+    riverctl map $mode None XF86Eject             spawn "eject -T"
+    riverctl map $mode None XF86AudioRaiseVolume  spawn "pamixer -i 5"
+    riverctl map $mode None XF86AudioLowerVolume  spawn "pamixer -d 5"
+    riverctl map $mode None XF86AudioMute         spawn "pamixer --set-volume 0"
+    riverctl map $mode None XF86AudioMedia        spawn "playerctl play-pause"
+    riverctl map $mode None XF86AudioPlay         spawn "playerctl play-pause"
+    riverctl map $mode None XF86AudioPrev         spawn "playerctl previous"
+    riverctl map $mode None XF86AudioNext         spawn "playerctl next"
+done
+
+
+###########
+# Pointer #
+###########
+riverctl map-pointer normal $MOD BTN_LEFT move-view
+riverctl map-pointer normal $MOD BTN_RIGHT resize-view
+riverctl focus-follow-cursor normal
+riverctl set-cursor-warp on-output-change
+
+
+##########
+# Filter #
+##########
+riverctl float-filter-add app-id launcher
+riverctl float-filter-add app-id popup
+riverctl float-filter-add app-id lhp.Snayk
+riverctl float-filter-add app-id com.rafaelmardojai.Blanket
+riverctl csd-filter-add app-id gnome-mines
+riverctl csd-filter-add app-id gnome-chess
+riverctl csd-filter-add app-id gnome-system-monitor
+riverctl csd-filter-add app-id org.gnome.Nautilus
+riverctl csd-filter-add app-id iceweasel
+riverctl csd-filter-add app-id com.rafaelmardojai.Blanket
