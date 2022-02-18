@@ -1,7 +1,7 @@
 
 ;; startup file is at /etc/systemd/kmonad.service
 ;; https://www.freedesktop.org/software/systemd/man/systemd.unit.html#
-;; it %E iS $XDG_HOME_DIR if service is ran by a "user manager", idk maybe set to multiuser.target, does not work, going to learn t
+;; it %E IS $XDG_HOME_DIR if service is ran by a "user manager", idk. maybe set to multiuser.target, does not work, going to learn t
 ;; , but the root user is running the service
 ;; I am not big brain enough
 ;;
@@ -11,7 +11,7 @@
 ;; keycode names are in this file
 ;; <KMONADFILE>/src/KMonad/Keyboard/Keycode.hs
 ;;
-;; my laptops is a nordic/danish layout, on my laptop,
+;; my laptop is a Nordic/danish layout,
 ;; fn is not included, as not detected by os
 
 (defcfg
@@ -48,13 +48,26 @@
  ;; stgl is "s=switch" "t=to" "g= proGram" "l=layer"
  stgl (around-next (layer-toggle launchers)  )
  ;; I can't get the toggle vi layer on tap to work, would like a fixing suggestion
- stvl (around-next (layer-toggle vi )  )
+
+ stvl (around-next (layer-toggle vi))
+
+ tvil (layer-toggle vi)
+
 
 ;; layer switching, does not work how i want: when using tapnext, you have to press 2 times to be able to hold it, so use tap-hold 500 if you want to hold down it
  win2l (tap-next @stgl lmet)
- ralt2vi  (tap-next @stvl ralt)
- ;; change layout to vi if "lalt", also called "altGr", is tapped,
+ ;;ralt2vi  (tap-next (tap-macro @tvil) ralt)
+
+ ralt2vi  (tap-next (layer-add vi) ralt)
+ ;; remove toggled vi layer
+ lctl-vi  (tap-next (layer-rem vi) rctl)
+ ;; ideally change layout to vi if "lalt"( also called "altGr") is tapped,
+ ;; but does not work as layertoggle only toggles the layer on for the duration that the button is held down.
+ ;; but I want a button that toggles on tap, stays on until i that the same button again
  lalt2l (tap-next @stgl lalt)
+
+stnum (layer-toggle num)
+ spc2n (tap-next spc @stnum)
 
 
 ;; paste primary X11 selection with keybord, so does not work on tty/console and probably not wayland
@@ -218,7 +231,7 @@ l (around  lmet l )
   @tm       q     w    e    r    t    y    u    i    o    p    [     ]        ret
   @cesc     a     s    d    f    g    _    _    _    _    ;    '     \
   lsft      102d  z    x    c    v    b    n    m    ,    .    /              rsft
-  lctl      @win2l lalt      spc            @ralt2vi rctl  lft up   down rght
+  lctl      @win2l lalt      @spc2n            @ralt2vi @stvl  lft up   down rght
 )
 
 
@@ -233,7 +246,7 @@ l (around  lmet l )
   @po       @volm @vold @volu @mic  _    _    _   @cam  @lck  _     @ldwn @lup   @prScrnF _  _
   _         @1    @2    @3     @4   @5   @6   @7   @8   @9    @0    _     _      _
   _         @q    _     _      _    _    _    _     _   _     @Ppst     _     _     @term
-  _         _     @kbd  @drun  @f   @no_gnu    _   _   _    _     _     _     _
+  _         _     @kbd  @drun  @f   @no_gnu    _   ret   _    _     _     _     _
   _         _     _     _      _      _    _    _    _    _   _     _     _
   _         _     _            _                _    _    _   _     _     _
 
@@ -243,7 +256,7 @@ l (around  lmet l )
 (deflayer vi
   _         _    _   _     _
   _         _    _   _     _   _    _    _   _  _  _  _     _  _ _  _
-  _         _    _   _     end   _    home    _   _  _  end  _     _  _
+  _         _    _   _     end   _    home    _   _  _  home  _     _  _
   _         _    _   _   ins    _    _  pgup    _ _  _     _  _
   _         _    _   _    pgdn  _   _    lft  down   up  rght _  _ _
   _         _    _   _     _   _    _    _   _  _   _ _        _
@@ -269,7 +282,22 @@ l (around  lmet l )
 ;; )
 ;;
 
+;;;;;;;;;;;;;;
+;; numlayer ;;
+;;;;;;;;;;;;;;
+(deflayer num
+  _         _    _ _ _
+  _         _    _   _     _   _    _    _   _  _  _      _      _   _ _  _
+  _         _     _  _     _   _    _    _   _  _   _      _   _     _      _
+  _         !    @    #    $    \_   =    %  ^  &    _     _     _
+  _         1    2   3     4   5    6    7   8  9     0     _     _
+  _         _     _  _     _   _    _    _   _  _   _     _     _
+  _         _     _            _                _    _    _   _     _     _
 
+ )
+  ;; _    !    @    #    $    \_   =    %    ^    &    *    _    _    _
+  ;; _    1    2    3    4    9    0    5    6    7    8    _    _
+  ;; _    _    _    -    \(   _    \)   +    _    _    _    _
 
 #|
 layer for symbol does not work :(, as kmonad only sends asci characters
