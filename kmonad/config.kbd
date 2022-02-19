@@ -1,4 +1,5 @@
 
+
 ;; startup file is at /etc/systemd/kmonad.service
 ;; https://www.freedesktop.org/software/systemd/man/systemd.unit.html#
 ;; it %E IS $XDG_HOME_DIR if service is ran by a "user manager", idk. maybe set to multiuser.target, does not work, going to learn t
@@ -11,6 +12,20 @@
 ;; keycode names are in this file
 ;; <KMONADFILE>/src/KMonad/Keyboard/Keycode.hs
 ;;
+;;;;
+;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; things to fix kmonad permissions to allow it to run
+;;
+;; groupadd uinput
+;;
+;; usermod -aG input $1
+;; usermod -aG uinput $1
+;; echo 'KERNEL="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' >> /etc/udev/rules.d/kmonad-udev.rules
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; my laptop is a Nordic/danish layout,
 ;; fn is not included, as not detected by os
 
