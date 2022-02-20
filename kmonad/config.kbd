@@ -71,18 +71,21 @@
 
 ;; layer switching, does not work how i want: when using tapnext, you have to press 2 times to be able to hold it, so use tap-hold 500 if you want to hold down it
  win2l (tap-next @stgl lmet)
- ;;ralt2vi  (tap-next (tap-macro @tvil) ralt)
 
- ralt2vi  (tap-next (layer-add vi) ralt)
+ ralt2vi  (tap-next (around-next (layer-toggle vi)) ralt)
  ;; remove toggled vi layer
- lctl-vi  (tap-next (layer-rem vi) rctl)
+ ;; lctl-vi  (tap-next (layer-rem vi) rctl)
  ;; ideally change layout to vi if "lalt"( also called "altGr") is tapped,
  ;; but does not work as layertoggle only toggles the layer on for the duration that the button is held down.
  ;; but I want a button that toggles on tap, stays on until i that the same button again
  lalt2l (tap-next @stgl lalt)
+ lalt2v (tap-next @stvl lalt)
 
 stnum (layer-toggle num)
- spc2n (tap-next spc @stnum)
+
+ ;; spc2n (tap-next spc @stnum )
+ tglvi  (layer-toggle vi)
+ spc2vi (tap-next spc  @tglvi)
 
 
 ;; paste primary X11 selection with keybord, so does not work on tty/console and probably not wayland
@@ -113,12 +116,14 @@ stnum (layer-toggle num)
         ;; screenlocker for X server
         lck (cmd-button "exec betterlockscreen -l")
 ;; media things
-        ;; screenshooter for X11, might add wayland compatible command, look on archwiki
+        ;; screenshooter for X11, might add wayland compatible command, look on archwiki,
+        ;; wayland version is grim
          prScrnC (cmd-button "scrot -s -f -o '/tmp/image.png' && xclip -selection clipboard -t 'image/png' -i /tmp/image.png" )
-        ;;cam opens camera recording appliction
-        cam (cmd-button "obs")
         ;; a butt@win2ln for saving screenshot as picture file on $HOME/Pictures/screenshots/
         prScrnF (cmd-button "scrot -s $HOME/Pictures/screenshots/'date +%Y-%d-%m_%H:%M:%S'.png" )
+
+        ;;cam opens camera recording appliction
+        cam (cmd-button "obs")
         ;; backlightlight
                 lup (cmd-button "light -A 10") ;; back-light down by 10 percent
                 ldwn (cmd-button "light -U 10") ;; back-light down by 10 percent
@@ -135,7 +140,7 @@ stnum (layer-toggle num)
 ;; mspadon (cmd-button "xinput --set-prop  $(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")" )" Device Enabled" 1
  
 ;; drun is "desktop run"
-;; try to run wayland runner first if fails (the <||> ) then run rofi
+;; try to run wayland runner first if fails (the <||> ) then run rofi, ( the reason for wayland program first is that wayland can run xorgprograms via xwayland, xorg cannot run wayland prorgrams)
 drun (cmd-button "wofi --show drun || rofi -modi drun -matching fuzzy -show drun")
 ;; for using  wayland on linux, use a wayland compatible program
 ;;drun (cmd-button ""
@@ -187,6 +192,10 @@ drun (cmd-button "wofi --show drun || rofi -modi drun -matching fuzzy -show drun
 
 
 
+;; movement in vi macros
+;; w #(Clft)
+;; b #(Crght)
+
 
 ;; keys are reserved for the window manager,
 ;;by making a alias, the key goes to that alias instead of the pressed key without modifier, it fucks up sometimes if you don't use tap-next and use tap-hold instead, but it's only, if you type very fast and hit the keys at almost same time,
@@ -211,6 +220,9 @@ l (around  lmet l )
 8 (around  lmet 8 )
 9 (around  lmet 9 )
 0 (around  lmet 0 )
+;; swithced lmet with lalt just provides ergonomics, usefull if not using spcbar
+;; slaltv (around @stgl lmet)
+;; slmetv (around @stgl lalt)
 ;;
 ;; "o" is for changing screens in awesomewm
 #|
@@ -249,7 +261,11 @@ l (around  lmet l )
   @tm       q     w    e    r    t    y    u    i    o    p    [     ]        ret
   @cesc     a     s    d    f    g    _    _    _    _    ;    '     \
   lsft      102d  z    x    c    v    b    n    m    ,    .    /              rsft
+<<<<<<< HEAD
   lctl      @win2l lalt      spc            @ralt2vi @stvl  lft up   down rght
+=======
+  lctl      @win2l @lalt2v spc            ralt rctl  lft up   down rght
+>>>>>>> f592cd6b0ad04e1f0e04027596673b5c80d49b70
 )
 
 
@@ -266,7 +282,7 @@ l (around  lmet l )
   _         @q    _     _      _    _    _    _     _   _     @Ppst     _     _     @term
   _         _     @kbd  @drun  @f   @no_gnu    _   ret   _    _     _     _     _
   _         _     _     _      _      _    _    _    _    _   _     _     _
-  _         _     _            _                _    _    _   _     _     _
+  _         _     _            @kbd             _    _    _   _     _     _
 
 )
 ;; vi layer is not working or done, b is pgup f is pagedown, 4 is end, 0 and 6 is home
@@ -277,7 +293,7 @@ l (around  lmet l )
   _         _    _   _     end   _    home    _   _  _  home  _     _  _
   _         _    _   _   ins    _    _  pgup    _ _  _     _  _
   _         _    _   _    pgdn  _   _    lft  down   up  rght _  _ _
-  _         _    _   _     _   _    _    _   _  _   _ _        _
+  _         _    _   bspc   _     _    _    _   _  _   _ _        _
   _         @win2l   _            _             _   _ _     _     _     _
 
 )
