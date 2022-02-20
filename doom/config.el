@@ -27,7 +27,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-one)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -99,6 +99,9 @@
 
 ;; allow dead-acute á and other accenting to work
 (require 'iso-transl)
+
+;; indicate folds in visual line mode
+    (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 
 ;; vim visual line go down binding for orgmode as this is the vim way
 ;; and if you like having lines soft folded/wrapped then it is for you

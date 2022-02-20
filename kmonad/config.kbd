@@ -30,11 +30,11 @@
 ;; fn is not included, as not detected by os
 
 (defcfg
-  input  (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd")
+  ;; input  (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd")
+  input (device-file "/dev/input/by-id/usb-Razer_Razer_BlackWidow_X_Chroma-event-kbd")
   output (uinput-sink
           "My KMonad output")                           ;; name of the created keyboard
           ;;"sleep 1 && setxkbmap -option compose:rctl" ;; additional, environment-specific, information
-  ;; composekey to grv which is ½, or the key from the "1" key on the numrow
   ;; cmp-seq rctl
   ;; cmp-seq-delay 5
   ;; fallthrough if true then if on a layer where the button is absent, then just pass as a normal button
@@ -108,7 +108,7 @@ stnum (layer-toggle num)
 
 
         ;; kitty is a terminal program, it is wayland and X11, alacritty is compatible, just run it as you would in terminal
-        term (cmd-button "kitty")
+        term (cmd-button "kitty || alacritty")
 
         ;; screenlocker for X server
         lck (cmd-button "exec betterlockscreen -l")
@@ -130,7 +130,7 @@ stnum (layer-toggle num)
         ;; turn of mic
         mic (cmd-button "amixer set Mic toggle" )
 
-;; idk i maybe have to run it as a bash-script or if you have hardware keys which my pc has, so i am skipping
+;; idk i maybe have to run it as a bash-script or if you have hardware keys which my pc has, so i am skipping implementing it
 ;; mspadof (cmd-button "xinput --set-prop  $(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")" )" Device Enabled" 0
 ;; mspadon (cmd-button "xinput --set-prop  $(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")" )" Device Enabled" 1
  
@@ -143,7 +143,8 @@ drun (cmd-button "wofi --show drun || rofi -modi drun -matching fuzzy -show drun
 ;;;;;;;;;;;
 ;; MACROS;;
 ;;;;;;;;;;;
-;; the tap-macro does not allow "_" then it pops <kmonad: Encountered 'Transparent' ouside of top-level layer>
+
+;; the tap-macro does not allow "_" then it pops <kmonad: Encountered 'Transparent' ouside of top-level layer
  no_gnu (tap-macro  ' I  u s e  L i n u x  a s  m y  o p e r a t i n g  s y s t e m , '  I  s t a t e  p r o u d l y  t o  t h e  u n k e m p t ,  b e a r d e d  m a n .  H e  s w i v e l s  a r o u n d  i n  h i s  d e s k  c h a i r  w i t h  a  d e v i l i s h  g l e a m  i n  h i s  e y e s ,  r e a d y  t o  m a n s p l a i n  w i t h  e x t r e m e  p r e c i s i o n .  ' A c t u a l l y ' ,  h e  s a y s  w i t h  a  g r i n ,  ' L i n u x  i s  j u s t  t h e  k e r n e l .  Y o u  u s e  G N U + L i n u x ! '  I  d o n ' t  m i s s  a  b e a t  a n d  r e p l y  w i t h  a  s m i r k ,  ' I  u s e  A l p i n e ,  a  d i s t r o  t h a t  d o e s n ' t  i n c l u d e  t h e  G N U  C o r e u t i l s ,  o r  a n y  o t h e r  G N U  c o d e .  I t ' s  L i n u x ,  b u t  i t ' s  n o t  G N U + L i n u x . '  T h e  s m i l e  q u i c k l y  d r o p s  f r o m  t h e  m a n ' s  f a c e .  H i s  b o d y  b e g i n s  c o n v u l s i n g  a n d  h e  f o a m s  a t  t h e  m o u t h  a n d  d r o p s  t o  t h e  f l o o r  w i t h  a  s i c k l y  t h u d .  A s  h e  w r i t h e s  a r o u n d  h e  s c r e a m s  ' I - I T  W A S  C O M P I L E D  W I T H  G C C !  T H A T  M E A N S  I T ' S  S T I L L  G N U ! '  C o o l l y ,  I  r e p l y  ' I f  w i n d o w s  w e r e  c o m p i l e d  w i t h  G C C ,  w o u l d  t h a t  m a k e  i t  G N U ? '  I  i n t e r r u p t  h i s  r e s p o n s e  w i t h  ' - a n d  w o r k  i s  b e i n g  m a d e  o n  t h e  k e r n e l  t o  m a k e  i t  m o r e  c o m p i l e r - a g n o s t i c .  E v e n  i f  y o u  w e r e  c o r r e c t ,  y o u  w o n ' t  b e  f o r  l o n g . '  W i t h  a  s i c k l y  w h e e z e ,  t h e  l a s t  o f  t h e  m a n ' s  l i f e  i s  e j e c t e d  f r o m  h i s  b o d y .  H e  l i e s  o n  t h e  f l o o r ,  c o l d  a n d  l i m p .  I ' v e  w o m a n s p l a i n e d  h i m  t o  d e a t h . )
 ;; tip, as the tapmacro function only takes a string as seperated by whitespace,
 ;; in python use the split() function
@@ -169,6 +170,8 @@ drun (cmd-button "wofi --show drun || rofi -modi drun -matching fuzzy -show drun
 ;; macros for latex;;
 ;;;;;;;;;;;;;;;;;;;;;
 
+ ;; I'll just use snippets
+
         ;; int is intergral for latex documents
         ;; int (tap-macro \ i n t { } { } )
         ;; alp (tap-macro \ a l p h a)
@@ -176,11 +179,11 @@ drun (cmd-button "wofi --show drun || rofi -modi drun -matching fuzzy -show drun
         ;; frac is a fractal or frational strait
         ;; frac (tap-macro \ f r a c { } { })
         ;; nbl (tap-macro \ n a b l a)
-        sum (tap-macro \ s u m  { } ^ { } )
+        ;; sum (tap-macro \ s u m  { } ^ { } )
 
-        phi (tap-macro \ p h i)
-        pi (tap-macro \ p i)
-        dt (tap-macro \ d e l t a )
+        ;; phi (tap-macro \ p h i)
+        ;; pi (tap-macro \ p i)
+        ;; dt (tap-macro \ d e l t a )
 
 
 
@@ -246,7 +249,7 @@ l (around  lmet l )
   @tm       q     w    e    r    t    y    u    i    o    p    [     ]        ret
   @cesc     a     s    d    f    g    _    _    _    _    ;    '     \
   lsft      102d  z    x    c    v    b    n    m    ,    .    /              rsft
-  lctl      @win2l lalt      @spc2n            @ralt2vi @stvl  lft up   down rght
+  lctl      @win2l lalt      spc            @ralt2vi @stvl  lft up   down rght
 )
 
 

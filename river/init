@@ -12,15 +12,19 @@
 # Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
 
 # Super+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
-riverctl map normal Super+Shift Return spawn "kitty"
+riverctl map normal Super+Shift Return spawn "kitty || alacritty || foot"
 
-# rive
+# launcher wofi, you can use others if you want
+riverctl map normal Super d spawn "wofi --show drun"
 
 # Super+Q to close the focused view
 riverctl map normal Super Q close
 
 # Super+Shift+E to exit river
 riverctl map normal Super+Shift E exit
+
+# reload river (stop river and start it again)
+riverctl map normal Super+Shift R spawn "riverctl exit & sleep 10; river"
 
 # Super+J and Super+K to focus the next/previous view in the layout stack
 riverctl map normal Super J focus-view next
@@ -34,8 +38,13 @@ riverctl map normal Super+Shift K swap previous
 # Super+Period and Super+Comma to focus the next/previous output
 riverctl map normal Super Period focus-output next
 riverctl map normal Super Comma focus-output previous
+# alias to S-C-j and S-C-k
+riverctl map normal Super+Control j focus-output next
+riverctl map normal Super+Control k focus-output previous
+
 
 # Super+Shift+{Period,Comma} to send the focused view to the next/previous output
+# this means switch screen
 riverctl map normal Super+Shift Period send-to-output next
 riverctl map normal Super+Shift Comma send-to-output previous
 
@@ -49,6 +58,10 @@ riverctl map normal Super L send-layout-cmd rivertile "main-ratio +0.05"
 # Super+Shift+H and Super+Shift+L to increment/decrement the main count of rivertile(1)
 riverctl map normal Super+Shift H send-layout-cmd rivertile "main-count +1"
 riverctl map normal Super+Shift L send-layout-cmd rivertile "main-count -1"
+
+##################
+# view managment #
+##################
 
 # Super+Alt+{H,J,K,L} to move views
 riverctl map normal Super+Alt H move left 100
@@ -97,6 +110,10 @@ all_tags=$(((1 << 32) - 1))
 riverctl map normal Super 0 set-focused-tags $all_tags
 riverctl map normal Super+Shift 0 set-view-tags $all_tags
 
+#####################
+# window management #
+#####################
+
 # Super+Space to toggle float
 riverctl map normal Super Space toggle-float
 
@@ -118,6 +135,11 @@ riverctl map normal Super F11 enter-mode passthrough
 
 # Super+F11 to return to normal mode
 riverctl map passthrough Super F11 enter-mode normal
+
+
+##############
+# media keys #
+##############
 
 # Various media key mapping examples for both normal and locked mode which do
 # not have a modifier
@@ -142,6 +164,10 @@ do
     riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5'
 done
 
+######################
+# aesteic prefrences #
+######################
+
 # Set background and border color
 riverctl background-color 0x002b36
 riverctl border-color-focused 0x93a1a1
@@ -161,3 +187,7 @@ riverctl csd-filter-add app-id "gedit"
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivertile
 exec rivertile -view-padding 6 -outer-padding 6
+
+
+# cursor follows monitor switch
+riverctl on-output-change
