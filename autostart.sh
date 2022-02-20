@@ -1,17 +1,26 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # only start process if it's not already running
 
 # this is a bashism, so it won't work on dash/sh,
-# "pgrep" gives the PID of a  process, -f means list name instead of PID
+# "pgrep" gives the PID of a  process, -f means list name instead of PID,
+# "$1" is 1.st argument starting from 0
 #
-function run {
-  if  ! pgrep -f $1 ;
-  then
-    $@&
-  fi
-}
+# function run {
+#   if  ! pgrep -f $1 ;
+#   then
+#     $@&
+#   fi
+# }
 
+# run in posix shell
+run () {
+  if  [  "" = "$(pgrep -f $1))" ]
+  then $@&
+  fi
+
+}
+#
 # enviroment varialbes
 # let gtk and qt handle fcitx compose key. else it breaks
 export XMODIFIERS=@im="ibus"
@@ -33,20 +42,16 @@ xinput --set-prop ${ID}  "Coordinate Transformation Matrix" 2.4 0 0 0 2.4 0 0 0 
 
 #DPMS, screen blankout time, to 60 seconds or 1 minute
 # WORKS ONLY FOR X11, YOU HAVE TO USE A DIFFERENT UTILITY/PROGRAM ON WAYLAND  
-xset s 60
+xset s 120
 
 #dwm statusbar 
 #run dwmblocks &
 
-#startup programs
-# web browser
-run firefox &
-#mail
-#run thunderbird &
 
 #statusbar applets
-run nm-applet &
-run redshift-gtk &
+run nm-applet 
+run redshift-gtk 
+run indicator-cpufreq
 
 ## services and daemons
 
@@ -65,9 +70,18 @@ run redshift-gtk &
 run thunar --daemon 
 
 
-#emacs started as a systemd service, the file is in ~/.config
+#emacs started as a service, this speeds up emacs startup by alot much
 run emacs --daemon 
-
-
+# key rebinder and some macros
 kmonad ~/.config/kmonad/config.kbd &
+
+
+#startup programs
+	# web browser
+	run firefox 
+	#mail
+	#run thunderbird &
+# syncronises files between pc's decentralised, privately and securely
+# this is better (in my opinion) than google drive and nextcloud as it's very simple to set up.but it kills battery.... normally i have [6-8]*45min battery, but with this  it barely had 4*45 min.... it takes a 1/3 battery... pathetic
+# run syncthing --no-browser
 
