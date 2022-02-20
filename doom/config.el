@@ -29,6 +29,7 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-one)
 
+
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Documents/")
@@ -65,15 +66,15 @@
 
 
 ;; always enable rainbow parenthesis, textmode is default mode which everything is built on
-;; (add-hook 'text-mode 'rainbow-delimiters-mode)
+(add-hook 'text-mode :lambda()(rainbow-delimiters-mode))
 
 ;; stick to 8 char tabs and indents, linux kernel style
 ;; https://www.kernel.org/doc/html/v4.10/process/coding-style.html
 (setq-default c-basic-offset 8)
 
 
-;; auto fill mode in org mode, as it can become too long if you're not hard wrapping
-(add-hook 'org-mode-hook 'auto-fill-mode)
+
+
 
 
 (setq org-agenda-files (list
@@ -98,10 +99,7 @@
 (setq-default fill-column 80)
 
 ;; allow dead-acute á and other accenting to work
-(require 'iso-transl)
-
-;; indicate folds in visual line mode
-    (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+;; (require 'iso-transl)
 
 ;; vim visual line go down binding for orgmode as this is the vim way
 ;; and if you like having lines soft folded/wrapped then it is for you
@@ -109,6 +107,7 @@
 ;; (define-key (current-local-map) [(g-k)] (evil-previous-visual-line) )
 ;; (define-key (current-local-map) [(g-j)] (evil-next-visual-line) )
   ;; ))
+;; (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 
 ;; Okular
 
@@ -128,13 +127,78 @@
                "./"
                (TeX-current-file-name-master-relative)))
 
-(setq TeX-view-program-selection '((output-pdf "Okular")))
+(setq TeX-view-program-selection '((output-pdf "zathura")))
 
 
+     ;; evil mode uses another keymap list table than normal....
      (add-hook 'org-mode-hook
                (lambda ()
                  (define-key evil-normal-state-map (kbd "gk")
                    'evil-previous-visual-line)
                  (define-key evil-normal-state-map (kbd "gj")
-                             'evil-next-visual-line)))
-     ;; evil mode uses another table than evil....
+                   'evil-next-visual-line)
+               ))
+
+;; auto fill mode in org mode, as it can become too long if you're not hard wrapping
+(add-hook 'org-mode-hook
+          (lambda ()
+            'auto-fill-mode
+ ;; show latex formulas as compiled verions completed
+          ;; 'org-latex-preview
+          ))
+;; different priority of tex viewers
+(setq latex-viewers '(zathura skim evince sumatrapdf okular pdf-tools))
+;; default language spelling dictionary, to danish
+ (setq ispell-dictionary "dansk")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;non english keyboard fixes;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; altgr/LeftAlt accenting fix
+(require 'iso-transl)
+;; to insert ~ use <dead-tilde> <SPC>
+
+;; (global-set-key (kbd "<dead-acute> ε") "έ")
+
+
+(setq fringe-indicator-alist
+ '((truncation)
+ (continuation)
+ (overlay-arrow)
+ (up)
+ (down)
+ (top)
+ (bottom)
+ (top-bottom)
+ (empty-line)
+ (unknown)
+ (left)
+ (right)
+))
+
+;; auctex, and latex fixes,
+;; for compilationmaybe use C-c C-a or C-c C-a
+ '("Handle" "external-command %(switches) %(arguments)" Auctex-handler)
+
+ '("Latex Make" "latexmk %(-pdf) %t" TeX-run-TeX)
+
+(setq visual-line-fringe-indicators '(left-curly-arrow
+                                      right-curly-arrow))
+
+;; jedi the coolest python autocompletion thing
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)                 ; optional
+
+;; emmet mode for doing html
+
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+
+(setq emmet-move-cursor-between-quotes t) ;; default nil
+
+;; emmet mode autocompletion emmet-ac, test out before being used
+ (add-hook 'sgml-mode-hook 'ac-emmet-html-setup)
+ (add-hook 'css-mode-hook 'ac-emmet-css-setup)
+
+;; emmet mode JSX support, maybe rjsx-mode, no hooks needed
+;;
