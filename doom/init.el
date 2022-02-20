@@ -34,11 +34,11 @@
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       ;;(emoji +unicode)  ; 🙂
+       (emoji +unicode)  ; 🙂
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        hydra
        indent-guides     ; highlighted indent columns
-       ;;ligatures         ; ligatures and symbols to make your code pretty again
+       ligatures         ; ligatures and symbols to make your code pretty again
        minimap           ; show a map of the code on the side
        modeline          ; snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink cursor line after big motions
@@ -50,11 +50,11 @@
         +icons
         + lsp)          ; a project drawer, like neotree but cooler
 
-       ;;unicode           ; extended unicode support for various languages
-        vc-gutter         ; vcs diff in the fringe
-        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
+       unicode           ; extended unicode support for various languages
+        ;; vc-gutter         ; vcs diff in the fringe
+        ;; vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        ;;window-select     ; visually switch windows
-       workspaces        ; tab emulation, persistence & separate workspaces
+       workspaces       ; tab emulation, persistence & separate workspaces
        ;;zen               ; distraction-free coding or writing
 
        :editor
@@ -74,23 +74,22 @@
        :emacs
        (dired +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
-       ;;ibuffer         ; interactive buffer management
+       ibuffer         ; interactive buffer management
        (undo +tree)              ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
        ;;eshell            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
-       term              ; basic terminal emulator for Emacs
+       ;; term              ; basic terminal emulator for Emacs
        vterm             ; the best terminal emulation in Emacs
 
        :checkers
-       syntax              ; tasing you for every semicolon you forget
+       syntax            ; tasing you for every semicolon you forget
        (spell
         +flyspell
-        +hunspell          ;; hunspell is superior spelling don't deny it
-        )
-         ; tasing you for misspelling mispelling
+        +hunspell        ; hunspell is superior spelling don't deny it
+        )                ; tasing you for misspelling mispelling
        grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -113,18 +112,18 @@
        ;;taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
-       ;;upload            ; map local to remote projects via ssh/ftp
+       upload            ; map local to remote projects via ssh/ftp
 
        :os
        (:if IS-MAC macos)  ; improve compatibility with macOS
-       ;;tty               ; improve the terminal Emacs experience
+       tty               ; improve the terminal Emacs experience
 
        :lang
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
        cc                ; C > C++ == 1
-       ;;clojure           ; java with a lisp
-       ;;common-lisp       ; if you've seen one lisp, you've seen them all
+       clojure           ; java with a lisp
+        ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
@@ -145,18 +144,18 @@
        ;;(haskell +lsp)    ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
-       ;;json              ; At least it ain't XML
+       json              ; At least it ain't XML
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
        ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
-       ;;latex             ; writing papers in Emacs has never been so fun
+       (latex +lsp)             ; writing papers in Emacs has never been so fun
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
-       lua               ; one-based indices? one-based indices
+       (lua +lsp)               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
-       ;;nix               ; I hereby declare "nix geht mehr!"
+       nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        org               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
@@ -169,7 +168,7 @@
        ;;rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        ;;(scheme +guile)   ; a fully conniving family of lisps
        sh                ; she sells {ba,z,fi}sh shells on the C xor
@@ -187,11 +186,11 @@
        ;;(wanderlust +gmail)
 
        :os
-       ;;exwm let emacs control X11 windows
+       ;;exwm               ;let emacs control X11 windows
 
        :app
        ;;calendar
-       ;;emms
+       ;;emms              ; webbrowser for emacs
        everywhere        ; *leave* Emacs!? You must be joking
        ;;irc               ; how neckbeards socialize
        (rss +org)        ; emacs as an RSS reader
@@ -201,63 +200,3 @@
        ;;literate
        (default +bindings +smartparens)
        )
-
-;; (custom-set-variables
-;;  '(package-archives
-;;    (quote
-;;     (("gnu" . "https://elpa.gnu.org/packages/")
-;;      ("ox-odt" . "https://kjambunathan.github.io/elpa/")))))
-
-;; (custom-set-variables
-;;  '(org-odt-convert-process "LibreOffice")
-;;  '(org-odt-preferred-output-format "docx")
-;;  '(org-odt-transform-processes
-;;    '(("Optimize Column Width of all Tables"
-;;       "soffice" "--norestore" "--invisible" "--headless"
-;;       "macro:///OrgMode.Utilities.OptimizeColumnWidth(%I)")
-;;      ("Update All"
-;;       "soffice" "--norestore" "--invisible" "--headless"
-;;       "macro:///OrgMode.Utilities.UpdateAll(%I)")
-;;      ("Reload"
-;;       "soffice" "--norestore" "--invisible" "--headless"
-;;       "macro:///OrgMode.Utilities.Reload(%I)")))
-;;  '(org-jabref-command '("/opt/jabref/bin/JabRef" "-n"))
-;;  '(org-latex-to-mathml-convert-command
-;;    "java -jar %j -unicode -force -df %o %I")
-;;  '(org-latex-to-mathml-jar-file
-;;    "/home/kjambunathan/Downloads/mathtoweb.jar"))
-
-;; (require 'ox-odt)
-;; ;; (require 'ox-jabref)
-
-;; ;; (setcdr (assq 'system org-file-apps-defaults-gnu) "xdg-open %s")
-;; (setcdr (assq 'system org-file-apps-gnu) "xdg-open %s")
-
-;; (advice-add 'org-open-file :around
-;;             (lambda (orig-fun &rest args)
-;;               ;; Work around a weird problem with xdg-open.
-;;               (let ((process-connection-type nil))
-;;                 (apply orig-fun args))))
-
-
-
-;; ;; jaja
-;; (defun my-org-screenshot ()
-;;   "Take a screenshot into a time stamped unique-named file in the
-;; same directory as the org-buffer and insert a link to this file."
-;;   (interactive)
-;;   (setq filename
-;;         (concat
-;;          (make-temp-name
-;;           (concat (buffer-file-name)
-;;                   "_"
-;;                   (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
-;;   (call-process "import" nil nil nil filename)
-;;   (insert (concat "[[" filename "]]"))
-;;   (org-display-inline-images))
-;; org bullets slow down if not set
-
-;; (require 'org-bullets)
-;; (add-hook 'org-mode-hook #'org-bullets-mode)
-
-;; (setq inhibit-compacting-font-caches t)
