@@ -261,11 +261,9 @@ l (around  lmet l )
   @tm       q     w    e    r    t    y    u    i    o    p    [     ]        ret
   @cesc     a     s    d    f    g    _    _    _    _    ;    '     \
   lsft      102d  z    x    c    v    b    n    m    ,    .    /              rsft
-<<<<<<< HEAD
-  lctl      @win2l lalt      spc            @ralt2vi @stvl  lft up   down rght
-=======
+
   lctl      @win2l @lalt2v spc            ralt rctl  lft up   down rght
->>>>>>> f592cd6b0ad04e1f0e04027596673b5c80d49b70
+
 )
 
 
