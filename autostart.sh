@@ -27,6 +27,28 @@ export XMODIFIERS=@im="ibus"
 export GTK_IM_MODULE="ibus"
 export QT_IM_MODULE="ibus"
 
+SE=$(loginctl show-session $(awk '/tty/ {print $1}' <(loginctl)) -p Type | awk -F= '{print $2}')
+if [ "$SE" = "wayland" ]; then
+ run waybar
+else
+#get id  number for touchpad
+ID=$(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")
+#bruger ID som nummer for device touchpad
+xinput set-prop ${ID} 308 1
+
+#also set touchpad sensetivity. 
+xinput --set-prop ${ID} 'libinput Accel Speed' 0.25
+#disable mouse accelaration
+xinput --set-prop ${ID}  "Coordinate Transformation Matrix" 2.4 0 0 0 2.4 0 0 0 1
+
+#java does not work in dwm because it is non-parenting, this does something that  this fixes it(found on arch wiki)
+#export AWT_TOOLKIT=MToolkit
+
+#DPMS, screen blankout time, to 60 seconds or 1 minute
+# WORKS ONLY FOR X11, YOU HAVE TO USE A DIFFERENT UTILITY/PROGRAM ON WAYLAND  
+xset s 120
+
+fi
 #get id  number for touchpad
 ID=$(xinput list | grep Touch | fold -w 8 | grep id | sed "s/id=//")
 #bruger ID som nummer for device touchpad
@@ -84,4 +106,5 @@ kmonad ~/.config/kmonad/config.kbd &
 # syncronises files between pc's decentralised, privately and securely
 # this is better (in my opinion) than google drive and nextcloud as it's very simple to set up.but it kills battery.... normally i have [6-8]*45min battery, but with this  it barely had 4*45 min.... it takes a 1/3 battery... pathetic
 # run syncthing --no-browser
-
+#
+# get session number and determine session type
